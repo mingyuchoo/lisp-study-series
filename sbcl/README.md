@@ -21,7 +21,8 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 
 ### Set up SBCL in Emacs
 
-Add below to `init.el` file
+Add below to `init.el` file.
+If you are using Doom Emacs, add below to `config.el` file.
 
 ```elisp
 ;; ...
@@ -29,9 +30,7 @@ Add below to `init.el` file
 (setq inferior-lisp-program "sbcl")
 ```
 
-
 ## Starting SBCL
-
 
 ### From Shell to LISP
 
@@ -65,7 +64,7 @@ Example file (`hello.lisp`):
 
 Usage examples:
 
-``` bash
+```bash
 $ ./hello.lisp
 Hello, World!
 
