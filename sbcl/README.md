@@ -8,7 +8,7 @@ Install SBCL with Brew
 brew install sbcl
 ```
 
-## Install QuickLISP and setup SBCL for Emacs
+### Install QuickLISP and setup SBCL for Emacs
 
 ```bash
 curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
@@ -19,7 +19,7 @@ sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
 sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 ```
 
-## Set up SBCL in Emacs
+### Set up SBCL in Emacs
 
 Add below to `init.el` file
 
@@ -27,4 +27,48 @@ Add below to `init.el` file
 ;; ...
 
 (setq inferior-lisp-program "sbcl")
+```
+
+
+## Starting SBCL
+
+
+### From Shell to LISP
+
+```bash
+$ sbcl
+* (+ 2 2)
+4
+* (exit)
+$
+```
+
+### Running from Emacs
+
+To run SBCL as a inferior-lisp from Emacs in your `.emacs` or `init.el`
+
+```elisp
+;; The SBCL binary and command-line arguments
+(setq inferior-lisp-program "sbcl")
+```
+
+### Shebang Scripts
+
+SBCL supports this via the `--script` command line option
+
+Example file (`hello.lisp`):
+
+```lisp
+#! /opt/homebrew/bin/sbcl --script
+(write-line "Hello, World!")
+```
+
+Usage examples:
+
+``` bash
+$ ./hello.lisp
+Hello, World!
+
+$ sbcl --script hello.lisp
+Hello, World!
 ```
