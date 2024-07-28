@@ -1,3 +1,2 @@
-#! sbcl --script
-
-(write-line "Hello, World!")
+(defun hello-world ()
+    (format t "Hello, World!~%"))

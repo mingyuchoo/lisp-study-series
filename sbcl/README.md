@@ -71,3 +71,19 @@ Hello, World!
 $ sbcl --script hello.lisp
 Hello, World!
 ```
+
+### Compile SBCL on Windows 11
+
+Write a compile script `compile-hello.lisp`
+
+```lisp
+(load "hello.lisp")
+(sb-ext:save-lisp-and-die "hello.exe" :toplevel #'hello-world :executable t)
+```
+
+Run the script
+
+```powershell
+> sbcl --script compile-hello.lisp
+> hello.exe
+```
