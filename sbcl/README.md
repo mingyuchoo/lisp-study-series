@@ -12,7 +12,8 @@ brew install sbcl
 
 - SBCL: an implementation of the Common Lisp programming language
 - CLISP: an implementation of the Common Lisp programming language
-- Quicklisp:  library manager for Common Lisp
+- Quicklisp: a library manager for Common Lisp
+- asdf: a build tool for Common Lisp
 
 ```bash
 curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
