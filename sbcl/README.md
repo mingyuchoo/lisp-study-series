@@ -58,9 +58,15 @@ $
 
 To run SBCL as a inferior-lisp from Emacs in your `.emacs` or `init.el`
 
-```elisp
+```lisp
 ;; The SBCL binary and command-line arguments
+(require 'slime-autoloads)
 (setq inferior-lisp-program "sbcl")
+(setq slime-contrib '(slime-fancy))
+```
+
+```lisp
+;; `M-x slime`
 ```
 
 ### Shebang Scripts
