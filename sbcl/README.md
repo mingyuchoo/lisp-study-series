@@ -24,10 +24,22 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 Add below to `init.el` file.
 If you are using Doom Emacs, add below to `config.el` file.
 
-```elisp
-;; ...
+```lisp
+;; 1st.
+;; Install `slime` package
+;;
+;; `M-x package-install RET slime RET`
+;;
 
+(require 'slime-autoloads)
 (setq inferior-lisp-program "sbcl")
+(setq slime-contrib '(slime-fancy))
+
+;; 2nd.
+;; Start SLIME in Emacs
+;;
+;; `M-x slime`
+;; 
 ```
 
 ## Starting SBCL
