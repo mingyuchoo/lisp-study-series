@@ -47,9 +47,30 @@ $
 
 ### Running from Emacs
 
-```lisp
-;; `M-x slime`
-```
+You must start SLIME in Emacs first.
+
+`M-x slime`
+
+After reading a list file into Emacs,
+evaluate or apply it with the following keybindings.
+
+- Evaluate a function definition
+`C-c C-c`
+
+- Call a function in the buffer `*slime-repl sbcl*`
+`C-C C-z`
+
+- Call a function in the REPL
+`CL-USER> (function-name args..)`
+
+- Apply a function in a source file
+`C-x C-e`
+
+- Evaludate a region selected in a buffer (after selecting a region)
+`C-c C-r`
+
+- Evaludate the entire buffer
+`C-c C-k`
 
 ### Shebang Scripts
 
