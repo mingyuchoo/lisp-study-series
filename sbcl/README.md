@@ -129,11 +129,13 @@ export ASDF_PATHS="$HOME/common-lisp"
 ```
 
 Create a Common Lisp project manually
+in your system directory `~/common-lisp`
+
 
 a project structure named `my-project` is ...
 
 ```
-my-project/
+~/common-lisp/my-project/
 ├── my-project.asd
 └── src/
     ├── package.lisp
