@@ -109,3 +109,55 @@ Run the script
 > sbcl --script compile-hello.lisp
 > hello.exe
 ```
+
+## Create a project with ASDF
+
+Check ASDF is installed in your system
+
+```bash
+$ sbcl
+* *features*
+(:QUICKLISP :ASDF3.3 ....
+
+```
+
+Set up system directory to use
+
+```bash
+mkdir -p ~/common-lisp
+export ASDF_PATHS="$HOME/common-lisp"
+```
+
+Create a Common Lisp project manually
+
+a project structure named `my-project` is ...
+
+```
+my-project/
+├── my-project.asd
+└── src/
+    ├── package.lisp
+    └── main.lisp
+```
+
+`my-project.asd` file is ...
+
+```lisp
+(defsystem "my-project"
+  :description "A simple example project"
+  :author "Your Name"
+  :version "0.1.0"
+  :pathname "src/"
+  :components ((:file "package")
+               (:file "main")))
+```
+
+Load and build project in SBCL REPL
+
+```bash
+sbcl
+```
+
+```lisp
+(asdf:load-system "my-project")
+```
