@@ -94,7 +94,7 @@ $ sbcl --script hello.lisp
 Hello, World!
 ```
 
-### Compile SBCL on Windows 11
+### Compile SBCL
 
 Write a compile script `compile-hello.lisp`
 
@@ -105,7 +105,7 @@ Write a compile script `compile-hello.lisp`
 
 Run the script
 
-```powershell
+```bash
 > sbcl --script compile-hello.lisp
 > hello.exe
 ```
