@@ -10,6 +10,10 @@ brew install sbcl
 
 ### Install QuickLISP and setup SBCL for Emacs
 
+- SBCL: an implementation of the Common Lisp programming language
+- CLISP: an implementation of the Common Lisp programming language
+- Quicklisp:  library manager for Common Lisp
+
 ```bash
 curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
 sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
@@ -21,25 +25,12 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 
 ### Set up SBCL in Emacs
 
-Add below to `init.el` file.
+Add below to `init.el` or `.emacs`.
 If you are using Doom Emacs, add below to `config.el` file.
 
 ```lisp
-;; 1st.
-;; Install `slime` package
-;;
-;; `M-x package-install RET slime RET`
-;;
-
-(require 'slime-autoloads)
+(load (expand-file-name "~/.quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "sbcl")
-(setq slime-contrib '(slime-fancy))
-
-;; 2nd.
-;; Start SLIME in Emacs
-;;
-;; `M-x slime`
-;; 
 ```
 
 ## Starting SBCL
@@ -55,15 +46,6 @@ $
 ```
 
 ### Running from Emacs
-
-To run SBCL as a inferior-lisp from Emacs in your `.emacs` or `init.el`
-
-```lisp
-;; The SBCL binary and command-line arguments
-(require 'slime-autoloads)
-(setq inferior-lisp-program "sbcl")
-(setq slime-contrib '(slime-fancy))
-```
 
 ```lisp
 ;; `M-x slime`
