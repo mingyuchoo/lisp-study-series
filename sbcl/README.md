@@ -112,54 +112,27 @@ Run the script
 
 ## Create a project with ASDF
 
-Check ASDF is installed in your system
-
-```bash
-$ sbcl
-* *features*
-(:QUICKLISP :ASDF3.3 ....
-
-```
-
-Set up system directory to use
-
-```bash
-mkdir -p ~/common-lisp
-export ASDF_PATHS="$HOME/common-lisp"
-```
-
-Create a Common Lisp project manually
-in your system directory `~/common-lisp`
-
-
-a project structure named `my-project` is ...
-
-```
-~/common-lisp/my-project/
-├── my-project.asd
-└── src/
-    ├── package.lisp
-    └── main.lisp
-```
-
-`my-project.asd` file is ...
-
-```lisp
-(defsystem "my-project"
-  :description "A simple example project"
-  :author "Your Name"
-  :version "0.1.0"
-  :pathname "src/"
-  :components ((:file "package")
-               (:file "main")))
-```
-
-Load and build project in SBCL REPL
-
 ```bash
 sbcl
 ```
 
 ```lisp
-(asdf:load-system "my-project")
+* (ql:quickload "quickproject")
+To load "quickproject":
+  Load 1 ASDF system:
+    quickproject
+; Loading "quickproject"
+[package quickproject].
+("quickproject")
+
+* (quickproject:make-project #p"~/.quicklisp/local-projects/demo-cl" :name "demo-cl")
+WARNING: Coercing #P"~/.quicklisp/local-projects/demo-cl" to directory
+"demo-cl"
+
+* (ql:quickload "demo-cl")
+To load "demo-cl":
+  Load 1 ASDF system:
+    demo-cl
+; Loading "demo-cl"
+("demo-cl")
 ```
