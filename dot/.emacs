@@ -4,12 +4,10 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+;; The SBCL binary and command-line arguments
+(after! slime
+  (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+  (setq inferior-lisp-program "rlwrap sbcl"))
 
 ;; change the path to yours.
 (setq inferior-lisp-program "~/.nix-profile/bin/sbcl")
-
-(setq slime-contribs '(slime-fancy))
-
-
-
