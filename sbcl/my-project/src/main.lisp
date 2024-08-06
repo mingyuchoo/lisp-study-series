@@ -1,9 +1,9 @@
-(defpackage #:my-project
-  (:use #:cl)
-  (:export #:hello-world))
+(defpackage my-project
+  (:use :cl)
+  (:export :main))
+  
+(in-package :my-project)
 
-(in-package #:my-project)
-
-(defun hello-world ()
+;; Main function
+(defun main ()
   (format t "Hello, World!~%"))
-

@@ -1,7 +1,12 @@
-(asdf:defsystem #:my-project
-  :description "A new Common Lisp project"
-  :author "Mingyu Choo <mingyuchoo@gmail.com>"
-  :license "MIT"
-  :version "0.1.0"
-  :serial t
-  :components ((:file "src/main")))
+(defsystem "my-project"
+  :version "0.0.1"
+  :author ""
+  :license ""
+  :depends-on ()
+  :components ((:module "src"
+                :components
+                ((:file "main"))))
+  :description ""
+  :build-operation "program-op"
+  :build-pathname "my-project"
+  :entry-point "my-project:main")

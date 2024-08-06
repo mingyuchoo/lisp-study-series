@@ -57,6 +57,13 @@ nil
 * nil
 ```
 
+## 5. Build binary
+
+```bash
+./build.sh my-project
+```
+
+
 ## References
 
 - <https://qiita.com/tamurashingo@github/items/0284c086c51e12e29240>
