@@ -7,3 +7,5 @@
 
 (setf sb-impl::*default-external-format* :utf-8)
 
+# Change print cases (:upcase :downcase :capitalize)
+(setf *print-case* :upcase)
