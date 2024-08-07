@@ -136,3 +136,25 @@ To load "demo-cl":
 ; Loading "demo-cl"
 ("demo-cl")
 ```
+
+## How to find and check the function signatures
+
+### In SBCL
+
+describe 함수를 사용하여 함수에 대한 정보 확인
+
+```lisp
+(describe '함수이름)
+```
+
+documentation 함수를 사용하여 함수의 문서 내용 확인
+
+```lisp
+(documentation '함수이름 'function)
+```
+
+### In SLIME on Emacs
+
+함수 이름 위에 커서를 두고 
+`C-c C-d h` 또는 `M-x slime-describe-symbol`를 
+입력해서 확인
