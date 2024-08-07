@@ -40,6 +40,33 @@ $ cat system-index.txt
 my-project/my-project.asd
 ```
 
+### Other ways to register local projects
+
+Quicklisp의 local-projects 메커니즘 사용
+
+```
+ln -s $(pwd) ~/quicklisp/local-projects/
+```
+
+ASDF의 central-registry 사용
+
+```
+(push (truename ".") asdf:*central-registry*)
+```
+
+ASDF 소스 레지스트리 설정 파일 사용
+
+```
+(:directory (:home "path/to/your/project"))
+```
+
+Quicklisp의 local-project-directories 변수 사용
+
+```
+(push (truename ".") ql:*local-project-directories*)
+(ql:register-local-projects)
+```
+
 ## 4. Load and run your project
 
 ```bash
