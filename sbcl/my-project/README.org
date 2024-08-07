@@ -1,5 +1,0 @@
-* My-Project 
-
-** Usage
-
-** Installation

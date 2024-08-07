@@ -12,6 +12,8 @@ nil
 
 ## 2. Create new project in `~/.quicklisp/local-projects/`
 
+Let's name the project we are going to create `my-project`.
+
 ```bash
 .
 ├── my-project
@@ -40,7 +42,7 @@ $ cat system-index.txt
 my-project/my-project.asd
 ```
 
-### Other ways to register local projects
+### Note: other ways to register local projects
 
 Quicklisp의 local-projects 메커니즘 사용
 
@@ -71,17 +73,23 @@ Quicklisp의 local-project-directories 변수 사용
 
 ```bash
 $ sbcl
-* (ql:quickload "my-porject")
+
+
+CL-USER> (ql:quickload :my-porject)
 To load "my-project":
   Load 1 ASDF system:
     my-project
 ; Loading "my-project"
+(:MY-PROJECT)
 
-("my-project")
-* (my-project:hello-world)()
+
+CL-USER> (in-package :my-project)
+#<PACKAGE "MY-PROJECT">
+
+
+MY-PROJECT> (hello-world)
 Hello, World!
-nil
-* nil
+NIL
 ```
 
 ## 5. Build binary
@@ -89,7 +97,6 @@ nil
 ```bash
 ./build.sh my-project
 ```
-
 
 ## References
 

@@ -112,6 +112,8 @@ Run the script
 
 ## Create a project with ASDF
 
+Let's name the project we are going to create `demo-cl`.
+
 ```bash
 sbcl
 ```
