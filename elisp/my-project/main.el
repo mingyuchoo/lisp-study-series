@@ -1,6 +1,6 @@
-;; hello-world.el
+;; main.el
 ;;
-;; run `emacs --batch -l hello-world.el` in your terminal or
+;; run `emacs --batch -l main.el` in your terminal or
 ;; evaluate in your Emacs using `C-x C-e` keybinding
 ;;
 (message "Hello, Emacs!")
