@@ -5,7 +5,7 @@
 Install SBCL with Brew
 
 ```bash
-brew install sbcl
+$ brew install sbcl
 ```
 
 ### Install QuickLISP and setup SBCL for Emacs
@@ -16,12 +16,12 @@ brew install sbcl
 - asdf: a build tool for Common Lisp; come with asdf included already.
 
 ```bash
-curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
+$ curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
 sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
      --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
      --eval '(ql:add-to-init-file)' \
      --quit
-sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
+$ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 ```
 
 ### Set up SBCL in Emacs
@@ -40,9 +40,9 @@ If you are using Doom Emacs, add below to `config.el` file.
 
 ```bash
 $ sbcl
-* (+ 2 2)
+CL-USER> (+ 2 2)
 4
-* (exit)
+CL-USER> (exit)
 $
 ```
 
@@ -94,7 +94,7 @@ $ sbcl --script hello.lisp
 Hello, World!
 ```
 
-### Compile SBCL
+## Compile a lisp file using SBCL
 
 Write a compile script `compile-hello.lisp`
 
@@ -115,28 +115,15 @@ Run the script
 Let's name the project we are going to create `demo-cl`.
 
 ```bash
-sbcl
+$ sbcl
 ```
 
 ```lisp
-* (ql:quickload "quickproject")
-To load "quickproject":
-  Load 1 ASDF system:
-    quickproject
-; Loading "quickproject"
-[package quickproject].
-("quickproject")
-
-* (quickproject:make-project #p"~/.quicklisp/local-projects/demo-cl" :name "demo-cl")
-WARNING: Coercing #P"~/.quicklisp/local-projects/demo-cl" to directory
-"demo-cl"
-
-* (ql:quickload "demo-cl")
-To load "demo-cl":
-  Load 1 ASDF system:
-    demo-cl
-; Loading "demo-cl"
-("demo-cl")
+CL-USER> (ql:quickload "quickproject")
+CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/<project-name>" :name "<project-name>")
+;; or    (quickproject:make-project "<project-name>")
+CL-USER> (ql:quickload "<project-name>")
+CL-USER> (in-package "<project-name>")
 ```
 
 ## How to find and check the function signatures

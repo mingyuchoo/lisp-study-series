@@ -1,13 +1,25 @@
 # README
 
+## 0. Create a project with ASDF
+
+```bash
+$ sbcl
+```
+
+```lisp
+CL-USER> (ql:quickload "quickproject")
+CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/<project-name>" :name "<project-name>")
+;; or    (quickproject:make-project "<project-name>")
+CL-USER> (ql:quickload "<project-name>")
+CL-USER> (in-package "<project-name>")
+```
+
 ## 1. Check `home` in REPL
 
 ```bash
 $ sbcl
-* ql:*quicklisp-home*
-#P"/home/<my-username>/.quicklisp/"
-nil
-* (quit)
+CL-USER> ql:*quicklisp-home*
+CL-USER> (quit)
 ```
 
 ## 2. Create new project in `~/.quicklisp/local-projects/`
@@ -30,9 +42,8 @@ Let's name the project we are going to create `my-project`.
 
 ```bash
 $ sbcl
-* (ql:register-local-projects)
-nil
-* (quit)
+CL-USER> (ql:register-local-projects)
+CL-USER> (quit)
 ```
 
 the file `system-index.txt` will be created just like this
@@ -73,23 +84,10 @@ Quicklisp의 local-project-directories 변수 사용
 
 ```bash
 $ sbcl
-
-
 CL-USER> (ql:quickload :my-porject)
-To load "my-project":
-  Load 1 ASDF system:
-    my-project
-; Loading "my-project"
-(:MY-PROJECT)
-
-
-CL-USER> (in-package :my-project)
-#<PACKAGE "MY-PROJECT">
-
-
-MY-PROJECT> (hello-world)
+CL-USER> (in-package :my-porject)
+CL-USER> (hello-world)
 Hello, World!
-NIL
 ```
 
 ## 5. Build binary
