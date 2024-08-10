@@ -1,0 +1,24 @@
+* terms
+** the s-expresions are symbolic expressions.
+*** are composed of three valid objects.
+**** atoms
+**** lists
+**** strings
+*** an example s-expression
+/C-c C-x s are keybindings for code block/
+#+begin_src common-lisp
+(+ 7 9 11)
+;; 27
+#+end_src
+** LISP uses prefix notation
+*** operators are written before their operands.
+#+begin_src common-lisp
+(+ (/ (* 60 9) 5) 32)
+;; + is an operator
+;; * is an operator
+;; / is an operator
+;; 9 is an operand
+;; 5 is an operand
+;; 60 is an operand
+;; 32 is an operand
+#+end_src
