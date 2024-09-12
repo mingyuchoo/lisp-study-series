@@ -54,7 +54,9 @@ $
 
 You must start SLIME in Emacs first.
 
-- `M-x slime` in Emacs
+```lisp
+M-x slime
+```
 
 After reading a list file into Emacs,
 evaluate or apply it with the following keybindings.
