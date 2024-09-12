@@ -29,9 +29,13 @@ $ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 Add below to `init.el` or `.emacs`.
 If you are using Doom Emacs, add below to `config.el` file.
 
+```bash
+$ brew install rlwrap
+```
+
 ```lisp
 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "rlwrap sbcl")
 ```
 
 ## Starting SBCL
