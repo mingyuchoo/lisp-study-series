@@ -8,9 +8,9 @@ $ sbcl
 
 ```lisp
 CL-USER> (ql:quickload "quickproject")
-CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/<project-name>" :name "<project-name>")
-CL-USER> (ql:quickload "<project-name>")
-CL-USER> (in-package "<project-name>")
+CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/{project-name}" :name "{project-name}")
+CL-USER> (ql:quickload "{project-name}")
+CL-USER> (in-package "{project-name}")
 ```
 
 ## 1. Check `home` in REPL
