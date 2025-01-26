@@ -14,19 +14,12 @@ asdf plugin-add sbcl https://github.com/smashedtoatoms/asdf-sbcl.git
 asdf install sbcl latest
 asdf global sbcl latest
 ```
-`$HOME/.tool-versions`
+`vim $HOME/.tool-versions`
 
 ```bash
 # $HOME/.tool-versions
 
 sbcl 2.5.0
-```
-
-Install SBCL
-
-```bash
-asdf install sbcl latest
-asdf global sbcl latest
 ```
 
 ### Install SBCL on macOS
