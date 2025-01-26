@@ -9,7 +9,7 @@ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
 . "$HOME/.asdf/asdf.sh"
 . "$HOME/.asdf/completions/asdf.bash"
 sudo apt install -y libzstd-dev libssl-dev automake autoconf libncurses5-dev
-sudo apt install -y dirmngr gpg curl gawk jq
+sudo apt install -y dirmngr gpg curl gawk jq rlwrap
 asdf plugin-add sbcl https://github.com/smashedtoatoms/asdf-sbcl.git
 asdf install sbcl latest
 asdf global sbcl latest
@@ -27,7 +27,7 @@ sbcl 2.5.0
 Install SBCL with Brew
 
 ```bash
-$ brew install sbcl
+$ brew install sbcl rlwrap
 ```
 
 ## Install QuickLISP and setup SBCL for Emacs
@@ -52,10 +52,6 @@ $ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 
 Add below to `init.el` or `.emacs`.
 If you are using Doom Emacs, add below to `config.el` file.
-
-```bash
-$ brew install rlwrap
-```
 
 ```lisp
 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
