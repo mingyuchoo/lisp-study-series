@@ -4,16 +4,22 @@
 
 ### Install with ASDF
 
-Install ASDF
-
 ```bash
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
+. "$HOME/.asdf/asdf.sh"
+. "$HOME/.asdf/completions/asdf.bash"
+sudo apt install -y libssl-dev automake autoconf libncurses5-dev
+sudo apt install -y dirmngr gpg curl gawk
+asdf plugin-add sbcl https://github.com/smashedtoatoms/asdf-sbcl.git
+asdf install sbcl latest
+asdf global sbcl latest
 ```
-
-Add SBC plugin to ASDF
+`$HOME/.tool-versions`
 
 ```bash
-asdf plugin-add sbcl https://github.com/smashedtoatoms/asdf-sbcl.git
+# $HOME/.tool-versions
+
+sbcl 2.5.0
 ```
 
 Install SBCL
