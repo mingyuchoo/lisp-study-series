@@ -30,7 +30,9 @@ Install SBCL with Brew
 $ brew install sbcl
 ```
 
-### Install QuickLISP and setup SBCL for Emacs
+## Install QuickLISP and setup SBCL for Emacs
+
+### Install QuickLISP
 
 - SBCL: an implementation of the Common Lisp programming language
 - CLISP: an implementation of the Common Lisp programming language
