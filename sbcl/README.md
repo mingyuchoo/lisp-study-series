@@ -7,7 +7,7 @@
 Install ASDF
 
 ```bash
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.1
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
 ```
 
 Add SBC plugin to ASDF
