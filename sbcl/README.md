@@ -144,6 +144,8 @@ Let's name the project we are going to create `demo-cl`.
 $ sbcl
 ```
 
+Change `{project-name}` to real project name; `demo-cl`.
+
 ```lisp
 CL-USER> (ql:quickload "quickproject")
 CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/{project-name}" :name "{project-name}")
