@@ -136,26 +136,35 @@ Run the script
 > hello.exe
 ```
 
-## Create a project with QuickLISP
+## Create and run a project with Quicklisp
 
 Let's name the project we are going to create `demo-cl`.
 
 ```bash
 $ sbcl
 ```
+### Create a project with Quicklisp
 
-Change `{project-name}` to real project name; `demo-cl`.
+`{project-name}` for real project name; `demo-cl`.
 
 ```lisp
-CL-USER> (ql:quickload "quickproject")
-CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/{project-name}" :name "{project-name}")
+;; Load `quickproject` to create a new project
+CL-USER> (ql:quickload :quickproject)
+;; Create `{project-name}` project to `~/.quicklisp/local-projects/{project-name}`
+CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/{project-name}" :name :{project-name})
 ```
 
-## Load th project with QuickLISP
+### Run the project with Quicklisp
 
 ```lisp
-CL-USER> (ql:quickload "{project-name}")
-CL-USER> (in-package "{project-name}")
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
+```
+### (Option) Run the project with ASDF
+
+```lisp
+(push "/<ABSOLUTE-PATH>/{project-name}/" asdf:*central-registry*)
+(asdf:load-system :{project-name})
 ```
 
 ## How to find and check the function signatures
