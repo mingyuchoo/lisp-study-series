@@ -136,7 +136,7 @@ Run the script
 > hello.exe
 ```
 
-## Create a project with ASDF
+## Create a project with QuickLISP
 
 Let's name the project we are going to create `demo-cl`.
 
@@ -149,6 +149,11 @@ Change `{project-name}` to real project name; `demo-cl`.
 ```lisp
 CL-USER> (ql:quickload "quickproject")
 CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/{project-name}" :name "{project-name}")
+```
+
+## Load th project with QuickLISP
+
+```lisp
 CL-USER> (ql:quickload "{project-name}")
 CL-USER> (in-package "{project-name}")
 ```
