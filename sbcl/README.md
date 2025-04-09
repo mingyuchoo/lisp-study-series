@@ -138,33 +138,133 @@ Run the script
 
 ## Create and run a project with Quicklisp
 
-Let's name the project we are going to create `demo-cl`.
+
+### CASE 1) Create a project with `quickproject`
 
 ```bash
 $ sbcl
 ```
-### Create a project with Quicklisp
-
-`{project-name}` for real project name; `demo-cl`.
 
 ```lisp
-;; Load `quickproject` to create a new project
-CL-USER> (ql:quickload :quickproject)
-;; Create `{project-name}` project to `~/quicklisp/local-projects/{project-name}`
-CL-USER> (quickproject:make-project #p"~/quicklisp/local-projects/{project-name}" :name :{project-name})
+CL-USER> (ql:quickload "quickproject")
+CL-USER> (quickproject:make-project #p"~/quicklisp/local-projects/{project-name}" :name "{project-name}")
+CL-USER> (ql:quickload "{project-name}")    ;; the project will be added to `system-index.txt`
+CL-USER> (in-package "{project-name}")
+CL-USER> (quit)
 ```
 
-### Run the project with Quicklisp
+Load the project again with Quicklisp in SBCL
 
-```lisp
-CL-USER> (ql:quickload :{project-name})
-CL-USER> (in-package :{project-name})
+```bash
+$ sbcl
 ```
-### (Option) Run the project with ASDF
 
 ```lisp
-(push "/<ABSOLUTE-PATH>/{project-name}/" asdf:*central-registry*)
-(asdf:load-system :{project-name})
+CL-USER> (ql:quickload "{project-name}")
+CL-USER> (in-package "{project-name}")
+CL-USER> (quit)
+```
+
+Check `home` in REPL
+
+```bash
+$ sbcl
+CL-USER> ql:*quicklisp-home*
+CL-USER> (quit)
+```
+
+### CASE 2) Create a project from scatch
+
+Create new project `my-project` in `~/quicklisp/local-projects/`
+
+```bash
+$ cd
+$ cd quicklisp/local-projects
+```
+
+Let's name the project we are going to create `my-project`.
+
+```bash
+$ mkdir my-project
+$ tree
+.
+├── my-project
+│   ├── my-project.asd
+│   ├── README.markdown
+│   ├── README.org
+│   ├── src
+│   │   └── main.lisp
+│   └── tests
+│       └── main.lisp
+```
+
+Register local projects: `my-project`
+
+```bash
+$ sbcl
+CL-USER> (ql:register-local-projects)
+CL-USER> (quit)
+```
+
+the file `system-index.txt` will be created just like this
+
+```bash
+$ cat system-index.txt
+my-project/my-project.asd
+```
+
+Load the project again with Quicklisp in SBCL
+
+```bash
+$ sbcl
+```
+
+```lisp
+CL-USER> (ql:quickload "{project-name}")
+CL-USER> (in-package "{project-name}")
+CL-USER> (quit)
+```
+
+### NOTE: other ways to register local projects
+
+Quicklisp의 local-projects 메커니즘 사용
+
+```
+ln -s $(pwd) ~/quicklisp/local-projects/
+```
+
+ASDF의 central-registry 사용
+
+```
+(push (truename ".") asdf:*central-registry*)
+```
+
+ASDF 소스 레지스트리 설정 파일 사용
+
+```
+(:directory (:home "path/to/your/project"))
+```
+
+Quicklisp의 local-project-directories 변수 사용
+
+```
+(push (truename ".") ql:*local-project-directories*)
+(ql:register-local-projects)
+```
+
+### Load and run your project
+
+```bash
+$ sbcl
+CL-USER> (ql:quickload :my-porject)
+CL-USER> (in-package :my-porject)
+CL-USER> (hello-world)
+Hello, World!
+```
+### Build binary
+
+```bash
+./build.sh my-project
 ```
 
 ## How to find and check the function signatures
