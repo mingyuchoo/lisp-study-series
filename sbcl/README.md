@@ -42,7 +42,7 @@ $ brew install sbcl rlwrap
 ```bash
 $ curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
 $ sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
-     --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
+     --eval '(quicklisp-quickstart:install :path "~/quicklisp")' \
      --eval '(ql:add-to-init-file)' \
      --quit
 $ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
@@ -54,7 +54,7 @@ Add below to `init.el` or `.emacs`.
 If you are using Doom Emacs, add below to `config.el` file.
 
 ```lisp
-(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "rlwrap sbcl")
 ```
 
@@ -150,8 +150,8 @@ $ sbcl
 ```lisp
 ;; Load `quickproject` to create a new project
 CL-USER> (ql:quickload :quickproject)
-;; Create `{project-name}` project to `~/.quicklisp/local-projects/{project-name}`
-CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/{project-name}" :name :{project-name})
+;; Create `{project-name}` project to `~/quicklisp/local-projects/{project-name}`
+CL-USER> (quickproject:make-project #p"~/quicklisp/local-projects/{project-name}" :name :{project-name})
 ```
 
 ### Run the project with Quicklisp
