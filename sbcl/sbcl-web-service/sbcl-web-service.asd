@@ -2,7 +2,7 @@
   :description "A web service built with Steel Bank Common Lisp."
   :author "mingyuchoo"
   :license "BSD 3-Clause"
-  :depends-on ("hunchentoot" "cl-json" "alexandria" "cl-ppcre" "cl-utilities")
+  :depends-on ("hunchentoot" "cl-json" "alexandria" "cl-ppcre" "cl-utilities" "split-sequence")
   :components ((:module "src"
                :serial t
                :components ((:file "package")
