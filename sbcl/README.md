@@ -138,7 +138,6 @@ Run the script
 
 ## Create and run a project with Quicklisp
 
-
 ### CASE 1) Create a project with `quickproject`
 
 ```bash
@@ -202,6 +201,66 @@ Register local projects: `my-project`
 
 ```bash
 $ sbcl
+CL-USER> (ql:register-local-projects)
+CL-USER> (quit)
+```
+
+the file `system-index.txt` will be created just like this
+
+```bash
+$ cat system-index.txt
+my-project/my-project.asd
+```
+
+Load the project again with Quicklisp in SBCL
+
+```bash
+$ sbcl
+```
+
+```lisp
+CL-USER> (ql:quickload "{project-name}")
+CL-USER> (in-package "{project-name}")
+CL-USER> (quit)
+```
+
+
+### CASE 3) Create a project from scatch
+
+Create new project `my-project` in `~/other-place-path/`
+
+```bash
+$ cd
+$ cd other-place-path
+```
+
+Let's name the project we are going to create `my-project`.
+
+```bash
+$ mkdir my-project
+$ tree
+.
+├── my-project
+│   ├── my-project.asd
+│   ├── README.markdown
+│   ├── README.org
+│   ├── src
+│   │   └── main.lisp
+│   └── tests
+│       └── main.lisp
+```
+
+Register local projects: `my-project`
+
+```bash
+$ sbcl
+CL-USER> (sb-ext:run-program
+            "/bin/ln"
+            (list "-s"
+               (merge-pathnames "other-place-path/my-project/" (user-homedir-pathname))
+               (merge-pathnames "quicklisp/local-projects/dem-sbcl" (user-homedir-pathname)))
+            :search nil
+            :wait t)
 CL-USER> (ql:register-local-projects)
 CL-USER> (quit)
 ```
