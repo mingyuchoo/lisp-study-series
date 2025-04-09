@@ -23,7 +23,7 @@
   (json:encode-json-to-string
    `((:status . "ok")
      (:version . "1.0.0")
-     (:timestamp . ,(get-universal-time)))))
+     (:timestamp . ,(get-timestamp)))))
 
 ;; Define a handler for 404 errors (not a route handler)
 (defun handle-404 ()
@@ -33,21 +33,14 @@
    (merge-pathnames "static/error.html" (truename "."))))
 
 ;; Add all our defined handlers to the dispatch table
-;; First clear the dispatch table
-(setf hunchentoot:*dispatch-table* nil)
-
-;; Then add our handlers in order of priority
-;; Root handler first
 (push (hunchentoot:create-prefix-dispatcher "/" 'root-page)
       hunchentoot:*dispatch-table*)
 
-;; API endpoints
 (push (hunchentoot:create-prefix-dispatcher "/api/example" 'api-example)
       hunchentoot:*dispatch-table*)
 
 (push (hunchentoot:create-prefix-dispatcher "/api/health" 'health-check)
       hunchentoot:*dispatch-table*)
 
-;; Catch-all handler for any other URLs - must be last
 (push (hunchentoot:create-regex-dispatcher "^/(?!api/|$).*" 'handle-404)
       hunchentoot:*dispatch-table*)
