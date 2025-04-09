@@ -1,7 +1,7 @@
 (defpackage :sbcl-web-service.tests
   (:use :cl :fiveam)
   (:import-from :drakma :http-request)
-  (:import-from :sbcl-web-service :start-server :stop-server)
+  (:import-from :sbcl-web-service :start-server :stop-server :*config*)
   (:export :run-tests))
 
 (in-package :sbcl-web-service.tests)
@@ -25,12 +25,9 @@
 ;; Test for hello world endpoint
 (test hello-world-endpoint
   "Test that the root endpoint returns 'Hello, World!'"
-  (let ((server nil)
-        (port 8088))
+  (let ((port 8088))
     ;; Start the server on a test port
-    (setf server (start-server port))
-    ;; Make sure the server is running
-    (is-true server)
+    (start-server port)
     ;; Test the root endpoint
     (multiple-value-bind (body status)
         (http-request (format nil "http://localhost:~A/" port))
@@ -38,6 +35,46 @@
       (is (= status 200))
       ;; Check that the body contains our expected message
       (is (string= "Hello, World!" (flexi-streams:octets-to-string body))))
+    ;; Stop the server
+    (stop-server)))
+
+;; Test for API endpoint
+(test api-endpoint
+  "Test that the API endpoint returns proper JSON"
+  (let ((port 8088))
+    ;; Start the server on a test port
+    (start-server port)
+    ;; Test the API endpoint
+    (multiple-value-bind (body status)
+        (http-request (format nil "http://localhost:~A/api/example" port))
+      ;; Check that we get a 200 OK response
+      (is (= status 200))
+      ;; Check that the body is valid JSON and contains expected fields
+      (let ((json-response (json:decode-json-from-string 
+                            (flexi-streams:octets-to-string body))))
+        (is (equal "success" (cdr (assoc :status json-response))))
+        (is (equal "API is working" (cdr (assoc :message json-response))))
+        (is (assoc :data json-response))))
+    ;; Stop the server
+    (stop-server)))
+
+;; Test for health check endpoint
+(test health-check-endpoint
+  "Test that the health check endpoint returns proper status"
+  (let ((port 8088))
+    ;; Start the server on a test port
+    (start-server port)
+    ;; Test the health endpoint
+    (multiple-value-bind (body status)
+        (http-request (format nil "http://localhost:~A/health" port))
+      ;; Check that we get a 200 OK response
+      (is (= status 200))
+      ;; Check that the body is valid JSON and contains expected fields
+      (let ((json-response (json:decode-json-from-string 
+                            (flexi-streams:octets-to-string body))))
+        (is (equal "ok" (cdr (assoc :status json-response))))
+        (is (assoc :version json-response))
+        (is (assoc :timestamp json-response))))
     ;; Stop the server
     (stop-server)))
 

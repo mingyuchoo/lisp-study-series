@@ -1,53 +1,41 @@
-;; Load Quicklisp first
+;; Load Quicklisp first - this must be done before anything else
 #-quicklisp
 (let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
   (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
+    (load quicklisp-init))
+  (unless (find-package :quicklisp)
+    (error "Quicklisp is not installed. Please install Quicklisp first.")))
 
 ;; Load required packages
-(ql:quickload :hunchentoot)
+(ql:quickload '(:hunchentoot :cl-json :alexandria :cl-ppcre :cl-utilities))
 
-(defpackage :sbcl-web-service
-  (:use :cl :hunchentoot)
-  (:export :start-server :stop-server))
+;; This is the main entry point file that loads all components
+;; The actual package definition is in package.lisp
 
-(in-package :sbcl-web-service)
+;; Load the components in the correct order
+;; 1. Package definition
+;; 2. Configuration
+;; 3. Utilities
+;; 4. Server management
+;; 5. Routes/controllers
 
-;; Define a global variable to store our server instance
-(defvar *acceptor* nil)
+;; Note: In a real ASDF system, these would be loaded automatically
+;; based on the system definition, but we're loading them manually here
+;; for clarity
 
-;; Define a simple handler function that returns 'Hello, World!'
-(define-easy-handler (hello-world :uri "/") ()
-  (setf (content-type*) "text/plain")
-  "Hello, World!")
+;; Load the package definition first
+(load "src/package.lisp")
 
-;; Function to start the server
-(defun start-server (&optional (port 8080))
-  (format t "Starting the SBCL web service on port ~A...~%" port)
-  
-  ;; Stop the server if it's already running
-  (when *acceptor*
-    (format t "Server is already running. Stopping it first...~%")
-    (stop-server))
-  
-  ;; Create and start a new server instance
-  (setf *acceptor* (make-instance 'easy-acceptor :port port))
-  (start *acceptor*)
-  
-  (format t "Server started successfully on port ~A!~%" port)
-  (format t "Visit http://localhost:~A/ to see 'Hello, World!'~%" port))
+;; Load configuration
+(load "src/config.lisp")
 
-;; Function to stop the server
-(defun stop-server ()
-  (when *acceptor*
-    (format t "Stopping the server...~%")
-    (stop *acceptor*)
-    (setf *acceptor* nil)
-    (format t "Server stopped.~%")))
+;; Load server management
+(load "src/server.lisp")
+
+;; Load routes/controllers
+(load "src/routes.lisp")
 
 ;; Main function to start the application
-(defun main ()
-  (start-server 8080))
-
-;; Start the server when this file is loaded
-(main)
+(defun sbcl-web-service:main ()
+  (format t "~%Starting SBCL Web Service Application~%")
+  (sbcl-web-service:start-server))

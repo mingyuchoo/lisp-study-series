@@ -4,9 +4,13 @@
   :license "BSD 3-Clause"
   :depends-on ("hunchentoot" "cl-json" "alexandria" "cl-ppcre" "cl-utilities")
   :components ((:module "src"
-               :components ((:file "main")
-                            (:file "routes")
-                            (:file "utils")))
+               :serial t
+               :components ((:file "package")
+                           (:file "config")
+                           (:file "utils")
+                           (:file "server")
+                           (:file "routes")
+                           (:file "main")))
                (:module "tests"
                :components ((:file "test-suite")))))
 
