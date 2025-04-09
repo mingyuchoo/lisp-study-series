@@ -34,7 +34,3 @@
     (hunchentoot:stop *acceptor*)
     (setf *acceptor* nil)
     (log-info "Server stopped.")))
-
-;; Main function to start the application
-(defun main ()
-  (start-server))
