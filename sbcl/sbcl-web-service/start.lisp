@@ -1,13 +1,5 @@
 ;; This is a startup script to help load the web service
 
-;; First, load Quicklisp
-#-quicklisp
-(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init))
-  (unless (find-package :quicklisp)
-    (error "Quicklisp is not installed. Please install Quicklisp first.")))
-
 ;; Make sure ASDF is loaded
 (require :asdf)
 
