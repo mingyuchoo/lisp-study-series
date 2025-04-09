@@ -1,6 +1,8 @@
 # README
 
-## 0. Create a project with ASDF
+## 1. Create a project with ASDF
+
+### CASE 1) Create a project with `quickproject`
 
 ```bash
 $ sbcl
@@ -8,12 +10,12 @@ $ sbcl
 
 ```lisp
 CL-USER> (ql:quickload "quickproject")
-CL-USER> (quickproject:make-project #p"~/.quicklisp/local-projects/{project-name}" :name "{project-name}")
+CL-USER> (quickproject:make-project #p"~/quicklisp/local-projects/{project-name}" :name "{project-name}")
 CL-USER> (ql:quickload "{project-name}")
 CL-USER> (in-package "{project-name}")
 ```
 
-## 1. Check `home` in REPL
+Check `home` in REPL
 
 ```bash
 $ sbcl
@@ -21,11 +23,20 @@ CL-USER> ql:*quicklisp-home*
 CL-USER> (quit)
 ```
 
-## 2. Create new project in `~/.quicklisp/local-projects/`
+### CASE 2) Create a project from scatch
+
+Create new project `my-project` in `~/quicklisp/local-projects/`
+
+```bash
+$ cd
+$ cd quicklisp/local-projects
+```
 
 Let's name the project we are going to create `my-project`.
 
 ```bash
+$ mkdir my-project
+$ tree 
 .
 ├── my-project
 │   ├── my-project.asd
@@ -37,7 +48,7 @@ Let's name the project we are going to create `my-project`.
 │       └── main.lisp
 ```
 
-## 3. Register local projects
+Register local projects: `my-project`
 
 ```bash
 $ sbcl
@@ -52,7 +63,7 @@ $ cat system-index.txt
 my-project/my-project.asd
 ```
 
-### Note: other ways to register local projects
+### NOTE: other ways to register local projects
 
 Quicklisp의 local-projects 메커니즘 사용
 
@@ -79,7 +90,7 @@ Quicklisp의 local-project-directories 변수 사용
 (ql:register-local-projects)
 ```
 
-## 4. Load and run your project
+## 2. Load and run your project
 
 ```bash
 $ sbcl
@@ -88,8 +99,7 @@ CL-USER> (in-package :my-porject)
 CL-USER> (hello-world)
 Hello, World!
 ```
-
-## 5. Build binary
+ ## 3. Build binary
 
 ```bash
 ./build.sh my-project
