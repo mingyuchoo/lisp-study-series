@@ -1,45 +1,30 @@
 # README
 
-## 1. Create a project with ASDF
+## 1. Create a project from scatch locally
 
-### CASE 1) Create a project with `quickproject`
-
-```bash
-$ sbcl
-```
-
-```lisp
-CL-USER> (ql:quickload "quickproject")
-CL-USER> (quickproject:make-project #p"~/quicklisp/local-projects/{project-name}" :name "{project-name}")
-CL-USER> (ql:quickload "{project-name}")
-CL-USER> (in-package "{project-name}")
-```
-
-Check `home` in REPL
-
-```bash
-$ sbcl
-CL-USER> ql:*quicklisp-home*
-CL-USER> (quit)
-```
-
-### CASE 2) Create a project from scatch
-
-Create new project `my-project` in `~/quicklisp/local-projects/`
+Create new project `{project-name}` in `~/another-path/` and download `quicklisp.lisp` here.
 
 ```bash
 $ cd
-$ cd quicklisp/local-projects
+$ cd another-path
+
+$ curl -O https://beta.quicklisp.org/quicklisp.lisp
+$ sbcl --load ./quicklisp.lisp
+
+CL-USER> (quicklisp-quickstart:install :path "./quicklisp")
+CL-USER> (ql:add-to-init-file)
+CL-USER> (ql:quickload :quicklisp-slime-helper)
+CL-USER> (quit)
 ```
 
-Let's name the project we are going to create `my-project`.
+Let's name the project we are going to create `{project-name}`.
 
 ```bash
-$ mkdir my-project
-$ tree 
+$ mkdir {project-name}
+$ tree
 .
-├── my-project
-│   ├── my-project.asd
+├── {project-name}
+│   ├── {project-name}.asd
 │   ├── README.markdown
 │   ├── README.org
 │   ├── src
@@ -48,19 +33,17 @@ $ tree
 │       └── main.lisp
 ```
 
-Register local projects: `my-project`
+Load local projects: `{project-name}`
 
 ```bash
-$ sbcl
-CL-USER> (ql:register-local-projects)
+sbcl
+CL-USER> (load #p"./quicklisp/setup.lisp")
+CL-USER> (ql:quickload :quickproject)
+CL-USER> (quickproject:make-project #p"./" :name "{project-name}")
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
 CL-USER> (quit)
-```
 
-the file `system-index.txt` will be created just like this
-
-```bash
-$ cat system-index.txt
-my-project/my-project.asd
 ```
 
 ### NOTE: other ways to register local projects
@@ -94,15 +77,16 @@ Quicklisp의 local-project-directories 변수 사용
 
 ```bash
 $ sbcl
-CL-USER> (ql:quickload :my-porject)
-CL-USER> (in-package :my-porject)
+
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
 CL-USER> (hello-world)
 Hello, World!
 ```
  ## 3. Build binary
 
 ```bash
-./build.sh my-project
+./build.sh {project-name}
 ```
 
 ## References

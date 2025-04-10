@@ -64,6 +64,7 @@ If you are using Doom Emacs, add below to `config.el` file.
 
 ```bash
 $ sbcl
+
 CL-USER> (+ 2 2)
 4
 CL-USER> (exit)
@@ -138,17 +139,61 @@ Run the script
 
 ## Create and run a project with Quicklisp
 
-### CASE 1) Create a project with `quickproject`
+### CASE 1) Create a project from scatch locally
+
+Create new project `{project-name}` in `~/another-path/` and download `quicklisp.lisp` here.
+
+```bash
+$ cd
+$ cd another-path
+
+$ curl -O https://beta.quicklisp.org/quicklisp.lisp
+$ sbcl --load ./quicklisp.lisp
+
+CL-USER> (quicklisp-quickstart:install :path "./quicklisp")
+CL-USER> (ql:add-to-init-file)
+CL-USER> (ql:quickload :quicklisp-slime-helper)
+CL-USER> (quit)
+```
+
+Let's name the project we are going to create `{project-name}`.
+
+```bash
+$ mkdir {project-name}
+$ tree
+.
+├── {project-name}
+│   ├── {project-name}.asd
+│   ├── README.markdown
+│   ├── README.org
+│   ├── src
+│   │   └── main.lisp
+│   └── tests
+│       └── main.lisp
+```
+
+Load local projects: `{project-name}`
+
+```bash
+sbcl
+CL-USER> (load #p"./quicklisp/setup.lisp")
+CL-USER> (ql:quickload :quickproject)
+CL-USER> (quickproject:make-project #p"./" :name "{project-name}")
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
+CL-USER> (quit)
+
+```
+
+### CASE 2) Create a project with `quickproject` 
 
 ```bash
 $ sbcl
-```
 
-```lisp
-CL-USER> (ql:quickload "quickproject")
+CL-USER> (ql:quickload :quickproject)
 CL-USER> (quickproject:make-project #p"~/quicklisp/local-projects/{project-name}" :name "{project-name}")
-CL-USER> (ql:quickload "{project-name}")    ;; the project will be added to `system-index.txt`
-CL-USER> (in-package "{project-name}")
+CL-USER> (ql:quickload :{project-name})    ;; the project will be added to `system-index.txt`
+CL-USER> (in-package :{project-name})
 CL-USER> (quit)
 ```
 
@@ -156,11 +201,9 @@ Load the project again with Quicklisp in SBCL
 
 ```bash
 $ sbcl
-```
 
-```lisp
-CL-USER> (ql:quickload "{project-name}")
-CL-USER> (in-package "{project-name}")
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
 CL-USER> (quit)
 ```
 
@@ -168,27 +211,28 @@ Check `home` in REPL
 
 ```bash
 $ sbcl
+
 CL-USER> ql:*quicklisp-home*
 CL-USER> (quit)
 ```
 
-### CASE 2) Create a project from scatch
+### CASE 3) Create a project in `~/quicklisp/local-projects/` manually
 
-Create new project `my-project` in `~/quicklisp/local-projects/`
+Create new project `{project-name}` in `~/quicklisp/local-projects/`
 
 ```bash
 $ cd
 $ cd quicklisp/local-projects
 ```
 
-Let's name the project we are going to create `my-project`.
+Let's name the project we are going to create `{project-name}`.
 
 ```bash
-$ mkdir my-project
+$ mkdir {project-name}
 $ tree
 .
-├── my-project
-│   ├── my-project.asd
+├── {project-name}
+│   ├── {project-name}.asd
 │   ├── README.markdown
 │   ├── README.org
 │   ├── src
@@ -197,10 +241,11 @@ $ tree
 │       └── main.lisp
 ```
 
-Register local projects: `my-project`
+Register local projects: `{project-name}`
 
 ```bash
 $ sbcl
+
 CL-USER> (ql:register-local-projects)
 CL-USER> (quit)
 ```
@@ -209,78 +254,16 @@ the file `system-index.txt` will be created just like this
 
 ```bash
 $ cat system-index.txt
-my-project/my-project.asd
+{project-name}/{project-name}.asd
 ```
 
 Load the project again with Quicklisp in SBCL
 
 ```bash
 $ sbcl
-```
 
-```lisp
-CL-USER> (ql:quickload "{project-name}")
-CL-USER> (in-package "{project-name}")
-CL-USER> (quit)
-```
-
-
-### CASE 3) Create a project from scatch
-
-Create new project `my-project` in `~/other-place-path/`
-
-```bash
-$ cd
-$ cd other-place-path
-```
-
-Let's name the project we are going to create `my-project`.
-
-```bash
-$ mkdir my-project
-$ tree
-.
-├── my-project
-│   ├── my-project.asd
-│   ├── README.markdown
-│   ├── README.org
-│   ├── src
-│   │   └── main.lisp
-│   └── tests
-│       └── main.lisp
-```
-
-Register local projects: `my-project`
-
-```bash
-$ sbcl
-CL-USER> (sb-ext:run-program
-            "/bin/ln"
-            (list "-s"
-               (merge-pathnames "other-place-path/my-project/" (user-homedir-pathname))
-               (merge-pathnames "quicklisp/local-projects/dem-sbcl" (user-homedir-pathname)))
-            :search nil
-            :wait t)
-CL-USER> (ql:register-local-projects)
-CL-USER> (quit)
-```
-
-the file `system-index.txt` will be created just like this
-
-```bash
-$ cat system-index.txt
-my-project/my-project.asd
-```
-
-Load the project again with Quicklisp in SBCL
-
-```bash
-$ sbcl
-```
-
-```lisp
-CL-USER> (ql:quickload "{project-name}")
-CL-USER> (in-package "{project-name}")
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
 CL-USER> (quit)
 ```
 
@@ -315,15 +298,16 @@ Quicklisp의 local-project-directories 변수 사용
 
 ```bash
 $ sbcl
-CL-USER> (ql:quickload :my-porject)
-CL-USER> (in-package :my-porject)
+
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
 CL-USER> (hello-world)
 Hello, World!
 ```
 ### Build binary
 
 ```bash
-./build.sh my-project
+./build.sh {project-name}
 ```
 
 ## How to find and check the function signatures
