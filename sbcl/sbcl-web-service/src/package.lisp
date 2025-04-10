@@ -1,8 +1,13 @@
 (defpackage :sbcl-web-service
+  (:documentation "A web service built with Steel Bank Common Lisp.")
   (:use :cl :split-sequence)
-  (:export :start-server 
+  (:export ;; Server management
+           :start-server 
            :stop-server
            :main
-           :*config*))
+           ;; Configuration
+           :*config*
+           :get-env-var
+           :read-env-file))
 
 (in-package :sbcl-web-service)
