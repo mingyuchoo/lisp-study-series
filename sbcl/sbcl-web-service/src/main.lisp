@@ -1,3 +1,5 @@
+(in-package :sbcl-web-service)
+
 ;;;; Main Application Entry Point
 
 ;; Load Quicklisp first - this must be done before anything else
@@ -19,20 +21,36 @@
       (format *error-output* "Error loading dependencies: ~A~%" e)
       nil)))  ; Return NIL on failure
 
+;; Initialize the application routes
+(defun initialize-routes ()
+  "Initialize all application routes."
+  ;; Clear the dispatch table to start fresh
+  (setf hunchentoot:*dispatch-table* nil)
+  
+  ;; Register all routes
+  (sbcl-web-service.web:register-web-routes)
+  (sbcl-web-service.api:register-api-routes)
+  
+  ;; Return success
+  t)
+
 ;; Main function to start the application
-(defun sbcl-web-service:main ()
+(defun main ()
   "Start the SBCL Web Service application.
    This is the main entry point for the application."
-  (format t "~%Starting SBCL Web Service Application~%")
+  (log-info "Starting SBCL Web Service Application")
   
   ;; Ensure dependencies are loaded
   (unless (load-dependencies)
-    (format t "Failed to load dependencies. Aborting startup.~%")
-    (return-from sbcl-web-service:main nil))
+    (log-error "Failed to load dependencies. Aborting startup.")
+    (return-from main nil))
+  
+  ;; Initialize routes
+  (initialize-routes)
   
   ;; Start the server
-  (let ((server (sbcl-web-service:start-server)))
+  (let ((server (start-server)))
     (if server
-        (format t "Application started successfully!~%")
-        (format t "Failed to start the application.~%"))
+        (log-info "Application started successfully!")
+        (log-error "Failed to start the application."))
     server))

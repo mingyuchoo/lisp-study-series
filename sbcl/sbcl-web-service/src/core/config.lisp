@@ -1,4 +1,4 @@
-(in-package :sbcl-web-service)
+(in-package :sbcl-web-service.core)
 
 ;;;; Environment Configuration
 
