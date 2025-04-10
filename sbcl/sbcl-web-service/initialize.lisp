@@ -1,4 +1,4 @@
-;;;; SBCL Web Service Startup Script
+;;;; SBCL Web Service Initialize Script
 
 ;; This script loads and starts the web service application
 ;; It handles dependency loading, system initialization, and provides helpful information
@@ -12,7 +12,7 @@
 (push (truename ".") asdf:*central-registry*)
 
 ;; Define a flag to track overall success
-(defvar *startup-success* t)
+(defvar *initialize-success* t)
 
 ;;;; Dependency Management
 
@@ -24,34 +24,34 @@
   (error (e)
     (format *error-output* "Error installing dependencies: ~A~%" e)
     (format t "Failed to install dependencies. Please check your Quicklisp installation.~%")
-    (setf *startup-success* nil)))
+    (setf *initialize-success* nil)))
 
 ;;;; System Loading
 
 ;; Only proceed if dependencies loaded successfully
-(when *startup-success*
+(when *initialize-success*
   (format t "Loading the web service system...~%")
   (handler-case
       (asdf:load-system :sbcl-web-service)
     (error (e)
       (format *error-output* "Error loading system: ~A~%" e)
       (format t "Failed to load the system. Please check for errors in the codebase.~%")
-      (setf *startup-success* nil))))
+      (setf *initialize-success* nil))))
 
-;;;; Application Startup
+;;;; Application Initialize
 
 ;; Only proceed if system loaded successfully
-(when *startup-success*
+(when *initialize-success*
   (format t "~%Starting the web service...~%")
   (let ((server (sbcl-web-service:main)))
     (unless server
       (format t "Failed to start the server. Check the logs for errors.~%")
-      (setf *startup-success* nil))))
+      (setf *initialize-success* nil))))
 
 ;;;; Server Information
 
 ;; Only display server information if everything started successfully
-(when *startup-success*
+(when *initialize-success*
   (let* ((env-vars (sbcl-web-service:read-env-file #p"config.env"))
          (port (sbcl-web-service:get-env-var env-vars "PORT" "8080"))
          (host (sbcl-web-service:get-env-var env-vars "IP" "127.0.0.1")))

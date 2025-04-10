@@ -70,7 +70,9 @@ sbcl
 To start the web service, run the following command in the SHELL:
 
 ```bash
-sbcl --load start.lisp
+./run-server.sh
+# or
+sbcl --load initialize.lisp
 ```
 
 You can then access the web service at `http://localhost:8080`.

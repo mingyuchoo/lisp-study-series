@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Create a startup script for SBCL
-cat > start-server.lisp << 'EOF'
-(load "start.lisp")
+cat > run-server.lisp << 'EOF'
+(load "initialize.lisp")
 (format t "~%Starting server in the background...~%")
 (sb-thread:make-thread #'sbcl-web-service:main)
 (format t "Server should now be running. Test with: curl http://localhost:8080/api/health~%")
@@ -11,4 +11,4 @@ cat > start-server.lisp << 'EOF'
 EOF
 
 # Run SBCL with the startup script
-sbcl --load start-server.lisp
+sbcl --load run-server.lisp
