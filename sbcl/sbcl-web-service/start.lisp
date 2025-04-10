@@ -19,8 +19,14 @@
 (format t "~%Starting the web service...~%")
 (sbcl-web-service:main)
 
+
+;; We'll use the get-env-var function from the sbcl-web-service package
+
+;; Read environment variables from config.env file
+(defparameter *env-vars* (sbcl-web-service::read-env-file #p"config.env"))
+
 ;; Print a helpful message
-(format t "~%Web service is running. Access it at http://localhost:8080/~%")
+(format t "~%Web service is running. Access it at http://localhost:~a/~%" (parse-integer (sbcl-web-service::get-env-var *env-vars* "PORT" "8080")))
 (format t "Available endpoints:~%")
 (format t "  / - Hello World~%")
 (format t "  /api/example - JSON API example~%")
