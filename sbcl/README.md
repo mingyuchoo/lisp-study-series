@@ -145,7 +145,8 @@ Setup Quicklisp for your new project
 
 ```bash
 $ cd
-$ cd another-path
+$ mkdir -p ./another-path/{project-name}
+$ cd ./another-path/{project-name}
 
 $ curl -O https://beta.quicklisp.org/quicklisp.lisp
 $ sbcl --load ./quicklisp.lisp
@@ -159,6 +160,8 @@ CL-USER> (quit)
 Create new project `{project-name}` in `~/another-path/` and download `quicklisp.lisp` here.
 
 ```bash
+$ cd
+$ cd ./another-path/{project-name}
 $ sbcl
 
 CL-USER> (load #p"./quicklisp/setup.lisp")
@@ -184,6 +187,8 @@ $ tree
 Load your project to SBCL REPL
 
 ```bash
+$ cd
+$ cd ./another-path/{project-name}
 $ sbcl
 
 CL-USER> (load #p"./quicklisp/setup.lisp")
