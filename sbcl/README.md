@@ -145,8 +145,8 @@ Setup Quicklisp for your new project
 
 ```bash
 $ cd
-$ mkdir -p ./another-path/{project-name}
-$ cd ./another-path/{project-name}
+$ mkdir -p ~/another-path/{project-name}
+$ cd ~/another-path/{project-name}
 
 $ curl -O https://beta.quicklisp.org/quicklisp.lisp
 $ sbcl --load ./quicklisp.lisp
@@ -161,7 +161,7 @@ Create new project `{project-name}` in `~/another-path/` and download `quicklisp
 
 ```bash
 $ cd
-$ cd ./another-path/{project-name}
+$ cd ~/another-path/{project-name}
 $ sbcl
 
 CL-USER> (load #p"./quicklisp/setup.lisp")
@@ -188,7 +188,7 @@ Load your project to SBCL REPL
 
 ```bash
 $ cd
-$ cd ./another-path/{project-name}
+$ cd ~/another-path/{project-name}
 $ sbcl
 
 CL-USER> (load #p"./quicklisp/setup.lisp")
@@ -277,50 +277,55 @@ $ sbcl
 
 CL-USER> (ql:quickload :{project-name})
 CL-USER> (in-package :{project-name})
+CL-USER> (hello-world) ;; hello-world 함수가 구현되어 있을 경우
+Hello, World!
 CL-USER> (quit)
 ```
 
-### NOTE: other ways to register local projects
+## NOTE
 
-Quicklisp의 local-projects 메커니즘 사용
+프로젝트가 Quicklisp 기본 로컬 경로(`~/quicklisp/local-projects/`)에 없을 때 등록 방법을 알려줍니다.
+특히 Emacs에서 SLIME을 실행한 뒤 프로젝트 인식을 못할 때 사용하면 유용합니다.
 
-```
-ln -s $(pwd) ~/quicklisp/local-projects/
-```
+### 방법 1) Quicklisp의 local-projects 메커니즘을 그대로 이용해되 심볼링 링크로 인식하게 함
 
-ASDF의 central-registry 사용
-
-```
-(push (truename ".") asdf:*central-registry*)
-```
-
-ASDF 소스 레지스트리 설정 파일 사용
-
-```
-(:directory (:home "path/to/your/project"))
-```
-
-Quicklisp의 local-project-directories 변수 사용
-
-```
-(push (truename ".") ql:*local-project-directories*)
-(ql:register-local-projects)
-```
-
-### Load and run your project
+아주 간단한 방법으로 기본 구조를 그대로 이용할 수 있습니다. 
 
 ```bash
+$ cd
+$ cd ~/another-path/{project-name}
+$ ln -s $(pwd) ~/quicklisp/local-projects/
 $ sbcl
 
 CL-USER> (ql:quickload :{project-name})
 CL-USER> (in-package :{project-name})
-CL-USER> (hello-world)
-Hello, World!
 ```
-### Build binary
+
+### 방법 2) ASDF의 central-registry 를 사용하여 등록함
 
 ```bash
-./build.sh {project-name}
+$ cd
+$ cd ~/another-path/{project-name}
+$ sbcl
+
+CL-USER> (require :asdf)
+CL-USER> (push (truename ".") asdf:*central-registry*)
+CL-USER> (asdf:load-system :{project-name})
+CL-USER> (in-package :{project-name})
+```
+
+### 방법 3) Quicklisp의 local-project-directories 변수 사용하여 등록함 
+
+```bash
+$ cd
+$ cd ~/another-path/{project-name}
+$ sbcl
+
+CL-USER> (load #P"./quicklisp/setup.lisp")
+CL-USER> (push (truename ".") ql:*local-project-directories*)
+CL-USER> (ql:register-local-projects)
+CL-USER> (ql:quickload :{project-name})
+CL-USER> (in-package :{project-name})
 ```
 
 ## How to find and check the function signatures
