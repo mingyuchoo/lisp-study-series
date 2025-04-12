@@ -330,8 +330,8 @@ CL-USER> (in-package :{project-name})
 
 ## How to find and check the function signatures
 
-### In SBCL
-
+### In SBCL REPL
+ 
 describe 함수를 사용하여 특정 함수나 심볼에 대한 정보 확인
 
 ```lisp
