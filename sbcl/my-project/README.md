@@ -9,7 +9,7 @@ $ cd
 $ cd another-path
 
 $ curl -O https://beta.quicklisp.org/quicklisp.lisp
-$ sbcl --load ./quicklisp.lisp
+$ sbcl --script setup-quicklisp.lisp
 
 CL-USER> (quicklisp-quickstart:install :path "./quicklisp")
 CL-USER> (ql:add-to-init-file)
@@ -23,14 +23,13 @@ Let's name the project we are going to create `{project-name}`.
 $ mkdir {project-name}
 $ tree
 .
-├── {project-name}
-│   ├── {project-name}.asd
-│   ├── README.markdown
-│   ├── README.org
-│   ├── src
-│   │   └── main.lisp
-│   └── tests
-│       └── main.lisp
+├── {project-name}.asd
+├── README.markdown
+├── README.org
+├── src
+│   └── main.lisp
+└── tests
+    └── main.lisp
 ```
 
 Load local projects: `{project-name}`

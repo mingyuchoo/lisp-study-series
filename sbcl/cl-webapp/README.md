@@ -32,7 +32,9 @@ A full-featured web application written in Common Lisp using the Hunchentoot web
 ├── static/               # Static assets directory
 │   ├── css/              # CSS files
 │   ├── js/               # JavaScript files
-└── templates.lisp        # HTML templates
+├── templates.lisp        # HTML templates
+├── quicklisp.lisp        # Quicklisp
+└── setup-quicklisp.lisp  # Script for setting up quicklisp.lisp
 ```
 
 ## Running the Application
@@ -49,6 +51,7 @@ A full-featured web application written in Common Lisp using the Hunchentoot web
 3. Run the application:
 
 ```bash
+sbcl --script setup-quicklisp.lisp
 sbcl --script simple-server.lisp
 ```
 
