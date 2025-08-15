@@ -2,25 +2,27 @@
 
 ## Install SBCL
 
-### Install with ASDF
+### Using `asdf` in Ubuntu
+
+Please install ASDF from https://asdf-vm.com/guide/getting-started.html
 
 ```bash
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
-. "$HOME/.asdf/asdf.sh"
-. "$HOME/.asdf/completions/asdf.bash"
-sudo apt install -y libzstd-dev libssl-dev automake autoconf libncurses5-dev
-sudo apt install -y dirmngr gpg curl gawk jq rlwrap
+sudo apt install -y libssl-dev automake autoconf libncurses-dev dirmngr gpg curl gawk libzstd-dev inotify-tools
+# Donload and install `asdf` from https://github.com/asdf-vm/asdf/releases
 asdf plugin add sbcl https://github.com/smashedtoatoms/asdf-sbcl.git
 asdf install sbcl latest
-asdf global sbcl latest
+vim $HOME/.tool-versions
 ```
-`vim $HOME/.tool-versions`
+
+`$HOME/.tool-versions`
 
 ```bash
 # $HOME/.tool-versions
-
-sbcl 2.5.0
+sbcl 2.5.7
 ```
+
+Add `$HOME/.asdf/shims` to the front of your `$PATH`.
+
 
 ### Install SBCL on macOS
 
