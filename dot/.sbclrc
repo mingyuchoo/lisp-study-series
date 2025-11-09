@@ -1,11 +1,18 @@
-;;; The following lines added by ql:add-to-init-file:
-#-quicklisp
-(let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
-                                       (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
-
 (setf sb-impl::*default-external-format* :utf-8)
 
 ;; Change print cases (:upcase :downcase :capitalize)
 (setf *print-case* :upcase)
+
+;;; Load Quicklisp
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+;;; Quicklisp이 로드된 후에만 실행
+#+quicklisp
+(progn
+  (when (find-package :ql)
+    (pushnew (truename ".") ql:*local-project-directories* :test #'equal)
+    (ql:register-local-projects)))
