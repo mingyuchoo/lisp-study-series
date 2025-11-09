@@ -221,20 +221,6 @@
     (load slime-helper)))
 (setq inferior-lisp-program "rlwrap sbcl")
 
-;; SLIME 추가 설정
-(use-package slime
-  :config
-  (slime-setup '(slime-fancy slime-asdf slime-quicklisp))
-  :hook (slime-repl-mode . (lambda () 
-                             (when (fboundp 'paredit-mode)
-                               (paredit-mode +1)))))
-
-;; Paredit (SLIME과 함께 사용)
-(use-package paredit
-  :hook ((emacs-lisp-mode . paredit-mode)
-         (lisp-mode . paredit-mode)
-         (scheme-mode . paredit-mode)))
-
 ;; Haskell
 (use-package haskell-mode
   :config
