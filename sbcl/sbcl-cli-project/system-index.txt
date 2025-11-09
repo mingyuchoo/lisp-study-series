@@ -1,1 +1,2 @@
 sbcl-cli-project.asd
+tests/sbcl-cli-project-tests.asd
