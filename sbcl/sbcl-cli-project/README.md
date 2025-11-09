@@ -6,15 +6,7 @@ Create new project `{project-name}` in `~/another-path/` and download `quicklisp
 
 ```bash
 $ cd
-$ cd another-path
-
-$ curl -O https://beta.quicklisp.org/quicklisp.lisp
 $ sbcl --script setup-quicklisp.lisp
-
-CL-USER> (quicklisp-quickstart:install :path "./quicklisp")
-CL-USER> (ql:add-to-init-file)
-CL-USER> (ql:quickload :quicklisp-slime-helper)
-CL-USER> (quit)
 ```
 
 Let's name the project we are going to create `{project-name}`.
