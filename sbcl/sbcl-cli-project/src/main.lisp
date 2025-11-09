@@ -1,8 +1,8 @@
-(defpackage my-project
+(defpackage sbcl-cli-project
   (:use :cl)
   (:export :main))
   
-(in-package :my-project)
+(in-package :sbcl-cli-project)
 
 ;; Main function
 (defun main ()
