@@ -4,7 +4,7 @@
 
 ```bash
 .
-├── compile-hello.lisp
+├── compiler-for-hello.lisp
 ├── hello.lisp
 ├── README.md
 ├── quicklisp.lisp
@@ -17,5 +17,5 @@
 
 ```bash
 sbcl --script setup-quicklisp.lisp
-sbcl --script compile-hello.lisp 
+sbcl --script compiler-for-hello.lisp 
 ```
