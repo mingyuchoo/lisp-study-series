@@ -45,15 +45,11 @@
       "c:/Users/mingy"
     (getenv "HOME")))
 
-(setq default-directory
-      (if choo/is-windows
-          choo/home-directory
-        (concat choo/home-directory "/Documents/org-roam")))
 
 ;; Unix-specific path setup
 (when choo/is-unix
-  (add-to-list 'exec-path (concat choo/home-directory "/.local/bin/"))
-  (add-to-list 'load-path (concat choo/home-directory "/.opam/default/share/emacs/site-lisp")))
+  (add-to-list 'exec-path (concat ".cargo/bin" "/.local/bin/"))
+  (add-to-list 'load-path (concat "/.opam/default/share/emacs/site-lisp")))
 
 ;; ============================================================================
 ;; BASIC SETTINGS
@@ -114,7 +110,7 @@
                     :foundry "DAMA"
                     :slant 'normal
                     :weight 'regular
-                    :height 120
+                    :height 160
                     :width 'normal)
 
 ;; Cursor
@@ -367,7 +363,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
+ '(package-selected-packages
+   '(alchemist dotenv-mode dune erlang haskell-mode helm lsp-haskell
+               lsp-ui lua-mode multiple-cursors neotree nix-mode
+               ob-rust ob-typescript ocamlformat ocp-indent opam
+               org-bullets org-roam rust-mode transpose-frame vterm
+               zig-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
