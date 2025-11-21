@@ -156,7 +156,7 @@
 (use-package neotree
   :config
   (setq neo-smart-open t
-        neo-window-width 40)
+        neo-window-width 30)
   :bind ("C-x n" . neotree-toggle))
 ;; ============================================================================
 ;; ORG MODE CONFIGURATION (Unix only)
@@ -219,18 +219,30 @@
 
 ;; Haskell
 (use-package haskell-mode
-  :config
-  (setq haskell-stylish-on-save t))
+  :hook
+  (haskell-mode . interactive-haskell-mode))
 
-(use-package lsp-mode)
-(use-package lsp-ui)
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :config
+  (setq lsp-enable-snippet t
+        lsp-completion-enable t))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-position 'at-point
+        lsp-ui-sideline-enable t))
 
 (use-package lsp-haskell
   :after (haskell-mode lsp-mode)
   :config
   (setq lsp-haskell-server-path "~/.ghcup/bin/haskell-language-server-wrapper")
-  :hook ((haskell-mode . lsp)
-         (haskell-literate-mode . lsp)))
+  :hook
+  ((haskell-mode . lsp)
+   (lsp-mode . (lambda ()
+                 (add-hook 'before-save-hook 'lsp-format-buffer nil t)))))
 
 ;; OCaml
 (use-package dune)
@@ -267,6 +279,22 @@
 ;; Disable line numbers for specific modes
 (dolist (mode '(term-mode-hook eshell-mode-hook dired-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+;; Setup Eshell prompt
+(setq eshell-prompt-function
+      (lambda ()
+        (concat
+         (propertize (format-time-string "%H:%M" (current-time))
+                     'face '(:foreground "cyan"))
+         " "
+         (propertize (abbreviate-file-name (eshell/pwd))
+                     'face '(:foreground "yellow" :weight bold))
+         "\n"
+         (propertize "λ " 'face '(:foreground "green"))
+         )))
+
+(setq eshell-prompt-regexp "^λ ")
+
 
 ;; Cleanup before saving
 (add-hook 'before-save-hook
@@ -363,18 +391,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(alchemist dotenv-mode dune erlang haskell-mode helm lsp-haskell
-               lsp-ui lua-mode multiple-cursors neotree nix-mode
-               ob-rust ob-typescript ocamlformat ocp-indent opam
-               org-bullets org-roam rust-mode transpose-frame vterm
-               zig-mode)))
+ '(column-number-mode t)
+ '(custom-enabled-themes '(leuven-dark))
+ '(display-battery-mode t)
+ '(display-time-mode t)
+ '(package-selected-packages nil)
+ '(tool-bar-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "UbuntuMono Nerd Font" :foundry "DAMA" :slant normal :weight regular :height 120 :width normal)))))
 
 ;;; .emacs ends here
