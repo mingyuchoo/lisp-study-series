@@ -278,7 +278,7 @@
 ;; ============================================================================
 
 ;; Disable line numbers for specific modes
-(dolist (mode '(term-mode-hook eshell-mode-hook dired-mode-hook))
+(dolist (mode '(term-mode-hook eshell-mode-hook dired-mode-hook vterm-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; Setup Eshell prompt
