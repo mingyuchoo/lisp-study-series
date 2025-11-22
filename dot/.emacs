@@ -1,7 +1,7 @@
 ;;; .emacs --- Personal Emacs Configuration
 ;;; Commentary:
 ;; Optimized and modular Emacs configuration
-;; Author: mgch
+;; Author: Mingyu Choo
 ;; Created: 2025
 
 ;;; Code:
@@ -48,8 +48,10 @@
 
 ;; Unix-specific path setup
 (when choo/is-unix
-  (add-to-list 'exec-path (concat ".cargo/bin" "/.local/bin/"))
-  (add-to-list 'load-path (concat "/.opam/default/share/emacs/site-lisp")))
+  (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
+  (add-to-list 'exec-path (expand-file-name "~/.local/bin"))
+  (add-to-list 'exec-path (expand-file-name "~/.ghcup/bin"))
+  (add-to-list 'load-path (expand-file-name "~/.opam/default/share/emacs/site-lisp")))
 
 ;; ============================================================================
 ;; BASIC SETTINGS
@@ -106,11 +108,11 @@
 
 ;; Font configuration
 (set-face-attribute 'default nil
-                    :family "D2CodingLigature Nerd Font"
+                    :family "UbuntuMono Nerd Font"
                     :foundry "DAMA"
                     :slant 'normal
                     :weight 'regular
-                    :height 160
+                    :height 120
                     :width 'normal)
 
 ;; Cursor
@@ -150,7 +152,10 @@
 
 ;; VTerm
 (use-package vterm
-  :bind ("C-x v" . vterm-toggle))
+  :bind ("C-x v" . vterm)
+  :config
+  (setq vterm-max-scrollback 10000)
+  (setq vterm-shell "/usr/bin/bash"))
 
 ;; Neotree
 (use-package neotree
@@ -219,28 +224,24 @@
 
 ;; Haskell
 (use-package haskell-mode
-  :hook
-  (haskell-mode . interactive-haskell-mode))
+  :hook (haskell-mode . lsp-deferred))
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
   (setq lsp-enable-snippet t
-        lsp-completion-enable t))
-
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-position 'at-point
-        lsp-ui-sideline-enable t))
+        lsp-completion-enable t
+        lsp-haskell-plugin-ghcide-completions-config-auto-extend-on t
+        lsp-format-on-save t))
 
 (use-package lsp-haskell
   :after (haskell-mode lsp-mode)
   :config
-  (setq lsp-haskell-server-path "~/.ghcup/bin/haskell-language-server-wrapper")
+  (setq lsp-haskell-server-path
+        (or (executable-find "haskell-language-server-wrapper")
+            (expand-file-name "~/.ghcup/bin/haskell-language-server-wrapper")))
   :hook
-  ((haskell-mode . lsp)
+  ((haskell-mode . lsp-deferred)
    (lsp-mode . (lambda ()
                  (add-hook 'before-save-hook 'lsp-format-buffer nil t)))))
 
@@ -392,17 +393,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-enabled-themes '(leuven-dark))
+ '(custom-enabled-themes '(misterioso))
  '(display-battery-mode t)
  '(display-time-mode t)
  '(package-selected-packages nil)
  '(tool-bar-mode nil))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "UbuntuMono Nerd Font" :foundry "DAMA" :slant normal :weight regular :height 120 :width normal)))))
 
 ;;; .emacs ends here
