@@ -121,6 +121,15 @@
 ;; Clean up messages buffer
 (when (get-buffer "*Messages*")
   (kill-buffer "*Messages*"))
+
+
+;; Dird
+(require 'ls-lisp)
+(setq ls-lisp-use-insert-directory-program nil)
+(setq ls-lisp-dirs-first t)
+(setq ls-lisp-ignore-case nil)
+(setq dired-listing-switches "-alh --group-directories-first")
+
 ;; ============================================================================
 ;; UTILITY PACKAGES
 ;; ============================================================================
