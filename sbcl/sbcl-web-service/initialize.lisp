@@ -11,6 +11,11 @@
 ;; Add the current directory to ASDF's search path
 (push (truename ".") asdf:*central-registry*)
 
+;; Load Quicklisp if available
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (truename "."))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
 ;; Define a flag to track overall success
 (defvar *initialize-success* t)
 
