@@ -29,7 +29,13 @@ This project is a web service built using Steel Bank Common Lisp (SBCL). It prov
    ```
    cd sbcl-web-service
    ```
-4. Load and run the project using ASDF:
+4. Install Quicklisp (first time only):
+   ```bash
+   sbcl --load setup-quicklisp.lisp --quit
+   ```
+   This will install Quicklisp locally in the project directory and download all required dependencies.
+
+5. Load and run the project using ASDF:
    ```lisp
    (push "/<ABSOLUTE-PATH>/sbcl-web-service/" asdf:*central-registry*)
    (asdf:load-system :sbcl-web-service)
