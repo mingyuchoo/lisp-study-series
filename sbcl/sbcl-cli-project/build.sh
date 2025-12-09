@@ -1,13 +1,7 @@
 #!/usr/bin/env sh
 
-# Store the first argument
-PROJECT_NAME=$1
-
-# Check the first argument
-if [ -z "$PROJECT_NAME" ]; then
-    echo "Usage: $0 <project-name>"
-    exit 1
-fi
+# Get the current directory name as project name
+PROJECT_NAME=$(basename "$(pwd)")
 
 # Run build command
 sbcl --eval "(require :asdf)"                                                    \
