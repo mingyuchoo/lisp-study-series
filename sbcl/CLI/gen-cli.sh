@@ -233,10 +233,10 @@ cat > "$PROJECT_NAME/build.sh" << EOF
 #!/usr/bin/env sh
 
 # Run build command
-sbcl --eval "(require :asdf)"                              \\
+sbcl --eval "(require :asdf)" \\
      --eval "(push (uiop:getcwd) asdf:*central-registry*)" \\
-     --eval "(asdf:load-system :$PROJECT_NAME)"            \\
-     --eval "(asdf:make :$PROJECT_NAME)"                   \\
+     --eval "(asdf:load-system :$PROJECT_NAME)" \\
+     --eval "(asdf:make :$PROJECT_NAME)" \\
      --eval "(quit)"
 EOF
 
@@ -249,9 +249,12 @@ cat > "$PROJECT_NAME/run-tests.sh" << EOF
 # Test runner script for sbcl-cli-project
 echo "Running tests for sbcl-cli-project..."
 
-sbcl --noinform                                             \\
+sbcl --noinform \\
+     --load "quicklisp/setup.lisp" \\
+     --eval "(push (truename \".\") asdf:*central-registry*)" \\
+     --eval "(push (truename \"./tests/\") asdf:*central-registry*)" \\
      --eval "(ql:quickload :$PROJECT_NAME-tests :silent t)" \\
-     --eval "(asdf:test-system :$PROJECT_NAME-tests)"       \\
+     --eval "(asdf:test-system :$PROJECT_NAME-tests)" \\
      --eval "(quit)"
 EOF
 
