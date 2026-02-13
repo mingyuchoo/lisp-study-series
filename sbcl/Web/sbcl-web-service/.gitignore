@@ -21,3 +21,6 @@
 .#*
 # Ignore the quicklisp directory
 **/quicklisp/
+
+# Coverage
+**/coverage-report/
