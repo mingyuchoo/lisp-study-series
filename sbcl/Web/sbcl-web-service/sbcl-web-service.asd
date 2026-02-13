@@ -7,26 +7,16 @@
                 :serial t
                 :components
                 ((:module "utils"
-                  :serial t
-                  :components ((:file "package")
-                             (:file "utils")))
+                  :components ((:file "utils")))
                  (:module "core"
                   :serial t
-                  :components ((:file "package")
-                             (:file "config")
+                  :components ((:file "config")
                              (:file "server")))
                  (:module "web"
-                  :serial t
-                  :components ((:file "package")
-                             (:file "routes")))
+                  :components ((:file "routes")))
                  (:module "api"
-                  :serial t
-                  :components ((:file "package")
-                             (:file "routes")))
-                 (:file "package")
-                 (:file "main")))
-               (:module "tests"
-               :components ((:file "test-suite")))))
+                  :components ((:file "routes")))
+                 (:file "main")))))
 
 (defsystem "sbcl-web-service/tests"
   :description "Test system for sbcl-web-service"

@@ -1,21 +1,34 @@
+(defpackage :sbcl-web-service
+  (:documentation "A web service built with Steel Bank Common Lisp.")
+  (:use :cl :split-sequence
+        :sbcl-web-service.core
+        :sbcl-web-service.utils
+        :sbcl-web-service.api
+        :sbcl-web-service.web)
+  (:export ;; Main entry point
+           :main
+           :load-dependencies
+           :build-dispatch-table
+           :initialize-routes
+           ;; Re-export core functionality
+           :start-server
+           :stop-server
+           :*config*
+           :*acceptor*
+           :get-env-var
+           :read-env-file))
+
 (in-package :sbcl-web-service)
 
 ;;;; Main Application Entry Point
 
-;; Load Quicklisp first - this must be done before anything else
-#-quicklisp
-(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init))
-  (unless (find-package :quicklisp)
-    (error "Quicklisp is not installed. Please install Quicklisp first.")))
-
-;; Define a function to load required dependencies
-(defun load-dependencies ()
-  "Load all required dependencies for the application."
+(defun load-dependencies (&optional (deps '(:hunchentoot :cl-json :alexandria
+                                            :cl-ppcre :cl-utilities :split-sequence)))
+  "Load all required dependencies for the application.
+   Accepts an optional list of dependency names for testability."
   (handler-case
       (progn
-        (ql:quickload '(:hunchentoot :cl-json :alexandria :cl-ppcre :cl-utilities :split-sequence) :silent t)
+        (ql:quickload deps :silent t)
         t)  ; Return T on success
     (error (e)
       (format *error-output* "Error loading dependencies: ~A~%" e)
@@ -41,15 +54,15 @@
   "Start the SBCL Web Service application.
    This is the main entry point for the application."
   (log-info "Starting SBCL Web Service Application")
-  
+
   ;; Ensure dependencies are loaded
   (unless (load-dependencies)
     (log-error "Failed to load dependencies. Aborting startup.")
     (return-from main nil))
-  
+
   ;; Initialize routes
   (initialize-routes)
-  
+
   ;; Start the server
   (let ((server (start-server)))
     (if server

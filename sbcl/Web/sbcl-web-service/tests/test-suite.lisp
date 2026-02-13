@@ -4,14 +4,15 @@
   ;; Main package
   (:import-from :sbcl-web-service
                 :start-server :stop-server :*config* :*acceptor*
-                :build-dispatch-table :initialize-routes)
+                :load-dependencies
+                :build-dispatch-table :initialize-routes :main)
   ;; Utils
   (:import-from :sbcl-web-service.utils
                 :get-timestamp
                 :*log-levels* :*current-log-level*
                 :log-level-enabled-p :log-message
                 :log-debug :log-info :log-warn :log-error :log-fatal
-                :parse-json-safely :encode-json-body)
+                :parse-json-safely :encode-json-body :json-response)
   ;; Core - config
   (:import-from :sbcl-web-service.core
                 :parse-env-line :read-env-file :get-env-var
@@ -57,6 +58,14 @@
   (if (stringp body)
       body
       (flexi-streams:octets-to-string body :external-format :utf-8)))
+
+(defun suppress-output (fn)
+  "Call FN with stdout and stderr suppressed. Returns the result of FN."
+  (let ((result nil))
+    (with-output-to-string (*standard-output*)
+      (with-output-to-string (*error-output*)
+        (setf result (funcall fn))))
+    result))
 
 ;;;; ============================================================
 ;;;; Master Test Suite
@@ -330,7 +339,8 @@
 (test parse-env-var-integer-invalid
   "Test parsing an invalid integer env var returns default"
   (let ((vars '(("PORT" . "not-a-number"))))
-    (is (= 3000 (parse-env-var-integer vars "PORT" 3000)))))
+    (is (= 3000 (suppress-output
+                  (lambda () (parse-env-var-integer vars "PORT" 3000)))))))
 
 (test parse-env-var-integer-missing
   "Test parsing a missing integer env var uses default"
@@ -349,6 +359,11 @@
 (test read-env-file-nonexistent
   "Test reading a non-existent file returns nil"
   (is-false (read-env-file #p"/tmp/nonexistent-env-file-12345.env")))
+
+(test read-env-file-directory-error
+  "Test reading a directory path triggers error handler"
+  (is-false (suppress-output
+              (lambda () (read-env-file #p"/tmp/")))))
 
 ;;; --- *config* structure ---
 
@@ -435,14 +450,35 @@
     (let ((acceptor (make-acceptor params)))
       (is (typep acceptor 'hunchentoot:easy-acceptor)))))
 
+;;; --- stop-acceptor error handling ---
+
+(test stop-acceptor-error-handling
+  "Test that stop-acceptor handles errors gracefully"
+  (let ((acceptor (make-acceptor '(:port 9998 :address "127.0.0.1"
+                                   :document-root #p"./static/"
+                                   :access-log-destination nil
+                                   :message-log-destination nil))))
+    ;; Stopping a never-started acceptor should trigger error handler
+    (is-false (suppress-output (lambda () (stop-acceptor acceptor))))))
+
 ;;; --- stop-server edge cases ---
 
 (test stop-server-when-not-running
   "Test stopping server when no server is running returns t"
   (let ((*acceptor* nil))
-    (let ((output (with-output-to-string (*standard-output*)
-                    (is-true (stop-server)))))
-      (declare (ignore output)))))
+    (suppress-output (lambda () (is-true (stop-server))))))
+
+;;; --- start-server error handling ---
+
+(test start-server-with-invalid-port
+  "Test that start-server handles port binding error gracefully"
+  ;; Port 1 requires root privileges and should fail
+  (let ((*acceptor* nil)
+        (*config* '(:server (:port 1 :address "127.0.0.1"
+                     :document-root #p"./static/"
+                     :access-log-destination nil
+                     :message-log-destination nil))))
+    (is-false (suppress-output (lambda () (start-server))))))
 
 ;;;; ============================================================
 ;;;; Web Route Tests
@@ -569,6 +605,47 @@
     ;; Restore
     (setf hunchentoot:*dispatch-table* old-table)))
 
+;;; --- load-dependencies ---
+
+(test load-dependencies-success
+  "Test that load-dependencies returns T when all deps are available"
+  (is-true (suppress-output (lambda () (load-dependencies)))))
+
+(test load-dependencies-failure
+  "Test that load-dependencies returns NIL when a dep fails to load"
+  (is-false (suppress-output
+              (lambda ()
+                (load-dependencies '(:nonexistent-system-that-does-not-exist-xyz))))))
+
+;;; --- main function ---
+
+(test main-function-success
+  "Test that main starts the application successfully"
+  (unwind-protect
+      (let ((result (suppress-output (lambda () (main)))))
+        (is-true result)
+        (is (typep result 'hunchentoot:easy-acceptor)))
+    (suppress-output (lambda () (stop-server)))))
+
+(test main-function-dependency-failure
+  "Test that main returns NIL when load-dependencies fails"
+  (let ((original-fn (fdefinition 'sbcl-web-service::load-dependencies)))
+    (unwind-protect
+        (progn
+          (setf (fdefinition 'sbcl-web-service::load-dependencies)
+                (lambda (&optional deps) (declare (ignore deps)) nil))
+          (is-false (suppress-output (lambda () (main)))))
+      (setf (fdefinition 'sbcl-web-service::load-dependencies) original-fn))))
+
+(test main-function-server-failure
+  "Test that main returns NIL when server fails to start"
+  (let ((*config* '(:server (:port 1 :address "127.0.0.1"
+                     :document-root #p"./static/"
+                     :access-log-destination nil
+                     :message-log-destination nil))))
+    (let ((result (suppress-output (lambda () (main)))))
+      (is-false result))))
+
 ;;;; ============================================================
 ;;;; Integration Tests (HTTP)
 ;;;; ============================================================
@@ -593,11 +670,9 @@
    (lambda (port)
      (declare (ignore port))
      ;; Start another server on a different port - this should stop the first
-     (let ((output (with-output-to-string (*standard-output*)
-                     (start-server 8089))))
-       (declare (ignore output))
-       (is-true *acceptor*)
-       (stop-server)))))
+     (suppress-output (lambda () (start-server 8089)))
+     (is-true *acceptor*)
+     (suppress-output (lambda () (stop-server))))))
 
 (test hello-world-endpoint
   "Test that the root endpoint returns HTML with Hello, World!"
@@ -676,17 +751,22 @@
        (let ((content-type (cdr (assoc :content-type headers))))
          (is (search "text/html" content-type)))))))
 
+;;; --- ensure-string utility ---
+
+(test ensure-string-with-string-input
+  "Test ensure-string returns string input unchanged"
+  (is (equal "hello" (ensure-string "hello"))))
+
+(test ensure-string-with-byte-array
+  "Test ensure-string converts byte array to string"
+  (let ((bytes (flexi-streams:string-to-octets "hello" :external-format :utf-8)))
+    (is (equal "hello" (ensure-string bytes)))))
+
 ;;;; ============================================================
-;;;; Test Runners
+;;;; Test Runner
 ;;;; ============================================================
 
 (defun run-tests ()
   (format t "Running tests for the SBCL web service...~%")
   (run! 'sbcl-web-service-tests)
   (format t "Tests completed.~%"))
-
-(defun run-tests-interactive ()
-  (format t "Running tests for the SBCL web service interactively...~%")
-  (run! 'sbcl-web-service-tests)
-  (explain! (get-test 'sbcl-web-service-tests))
-  (format t "Interactive tests completed.~%"))
