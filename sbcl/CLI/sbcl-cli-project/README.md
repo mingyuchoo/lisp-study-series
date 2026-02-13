@@ -9,8 +9,8 @@
 먼저 홈 디렉토리로 이동하여 Quicklisp를 설치합니다:
 
 ```bash
-$ cd
-$ sbcl --script setup-quicklisp.lisp
+cd
+sbcl --script setup-quicklisp.lisp
 ```
 
 ### 프로젝트 생성
@@ -46,6 +46,7 @@ CL-USER> (quit)
 ```
 
 **설명:**
+
 - `quickproject`는 Common Lisp 프로젝트의 기본 구조를 자동으로 생성해주는 도구입니다
 - `.asd` 파일은 ASDF(Another System Definition Facility) 시스템 정의 파일입니다
 - `src/` 디렉토리에는 소스 코드를, `tests/` 디렉토리에는 테스트 코드를 작성합니다
@@ -92,7 +93,7 @@ ln -s $(pwd) ~/quicklisp/local-projects/
 가장 기본적인 SBCL REPL을 실행합니다:
 
 ```bash
-$ sbcl
+sbcl
 ```
 
 ### 프로젝트가 로드된 상태로 REPL 실행
@@ -106,6 +107,7 @@ $ sbcl --eval "(load \"quicklisp/setup.lisp\")" \
 ```
 
 **설명:**
+
 - `--eval` 옵션으로 SBCL 시작 시 자동으로 명령어를 실행합니다
 - `uiop:getcwd`는 현재 작업 디렉토리를 가져옵니다
 - 프로젝트가 자동으로 로드되어 바로 사용할 수 있습니다
@@ -126,6 +128,7 @@ SBCL-CLI-PROJECT> (quit)                         ; REPL 종료
 ```
 
 **설명:**
+
 - `load`: Lisp 파일을 로드합니다
 - `push`: 리스트의 앞에 요소를 추가합니다
 - `ql:quickload`: Quicklisp를 통해 시스템을 로드합니다
@@ -145,6 +148,7 @@ Hello, World!
 ```
 
 **설명:**
+
 - Quicklisp를 통해 프로젝트와 모든 의존성이 자동으로 로드됩니다
 - 패키지를 전환하면 프로젝트의 함수들을 직접 호출할 수 있습니다
 - 패키지 이름은 대소문자를 구분하지 않습니다
@@ -158,6 +162,7 @@ Hello, World!
 ```
 
 **설명:**
+
 - `build.sh` 스크립트는 SBCL의 `save-lisp-and-die` 함수를 사용하여 실행 파일을 생성합니다
 - 생성된 바이너리는 Lisp 런타임 없이도 독립적으로 실행할 수 있습니다
 - 빌드된 실행 파일은 배포가 용이하며 시작 시간이 빠릅니다
@@ -208,12 +213,14 @@ Hello, World!
 ### 일반적인 문제 해결
 
 **문제: 프로젝트를 찾을 수 없음**
+
 ```lisp
 ; 해결: ASDF 레지스트리에 프로젝트 경로 추가
 (push (truename ".") asdf:*central-registry*)
 ```
 
 **문제: 의존성 로드 실패**
+
 ```lisp
 ; 해결: Quicklisp 업데이트
 (ql:update-client)

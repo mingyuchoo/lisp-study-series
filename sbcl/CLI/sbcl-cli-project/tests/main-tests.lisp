@@ -10,18 +10,12 @@
 
 (in-suite sbcl-cli-project-tests)
 
-;; Test for main function
 (test main-function-output
   "Test that main function outputs 'Hello, World!'"
   (let ((output (with-output-to-string (*standard-output*)
                   (sbcl-cli-project:main))))
     (is (string= "Hello, World!
-" output))
-    (is (not (string= "" output)))))
-
-(test main-function-exists
-  "Test that main function exists and is callable"
-  (finishes (sbcl-cli-project:main)))
+" output))))
 
 ;; Run tests when loading this file directly
 (defun run-tests ()

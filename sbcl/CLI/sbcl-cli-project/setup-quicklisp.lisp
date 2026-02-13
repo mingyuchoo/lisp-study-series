@@ -1,7 +1,7 @@
 ;;;; setup-quicklisp.lisp
 ;;;; Script to install and set up Quicklisp
 
-(format t "~%Setting up Quicklisp for Common Lisp Web Application...~%")
+(format t "~%Setting up Quicklisp for sbcl-cli-project...~%")
 
 ;; Check if Quicklisp is already installed in project directory
 (if (probe-file "quicklisp/setup.lisp")
@@ -34,8 +34,8 @@
 (format t "Installing required packages...~%")
 (handler-case
     (progn
-      (funcall (intern "QUICKLOAD" (find-package "QL")) 
-               '(:hunchentoot :cl-who :parenscript :cl-css :spinneret))
+      (funcall (intern "QUICKLOAD" (find-package "QL"))
+               '(:fiveam))
       (format t "All packages installed successfully.~%"))
   (error (e)
     (format t "Error installing packages: ~A~%" e)
