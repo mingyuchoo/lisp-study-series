@@ -52,11 +52,13 @@ cat > "$PROJECT_NAME/.gitignore" << 'EOF'
 .#*
 # Ignore the quicklisp directory
 **/quicklisp/
+# Coverage
+**/coverage-report/
 EOF
 
 # Create .tool-versions
 cat > "$PROJECT_NAME/.tool-versions" << 'EOF'
-sbcl 2.5.10
+sbcl 2.6.0
 
 EOF
 
@@ -97,7 +99,7 @@ Hello, World!
 ## 3. Build binary
 
 \`\`\`bash
-./build.sh
+./run-build.sh
 \`\`\`
 
 This will create an executable binary named \`$PROJECT_NAME\`.
@@ -115,7 +117,7 @@ $PROJECT_NAME/
 ├── .gitignore
 ├── .tool-versions
 ├── README.md
-├── build.sh
+├── run-build.sh
 ├── quicklisp.lisp
 ├── run-tests.sh
 ├── setup-quicklisp.lisp
@@ -228,8 +230,8 @@ cat > "$PROJECT_NAME/src/main.lisp" << EOF
 
 EOF
 
-# Create build.sh
-cat > "$PROJECT_NAME/build.sh" << EOF
+# Create run-build.sh
+cat > "$PROJECT_NAME/run-build.sh" << EOF
 #!/usr/bin/env sh
 
 # Run build command
@@ -240,7 +242,7 @@ sbcl --eval "(require :asdf)" \\
      --eval "(quit)"
 EOF
 
-chmod +x "$PROJECT_NAME/build.sh"
+chmod +x "$PROJECT_NAME/run-build.sh"
 
 # Create run-tests.sh
 cat > "$PROJECT_NAME/run-tests.sh" << EOF
@@ -313,7 +315,7 @@ echo ""
 echo "Next steps:"
 echo "  1. cd $PROJECT_NAME"
 echo "  2. sbcl --script setup-quicklisp.lisp"
-echo "  3. ./build.sh"
+echo "  3. ./run-build.sh"
 echo "  4. ./$PROJECT_NAME"
 echo ""
 echo "Happy hacking!"

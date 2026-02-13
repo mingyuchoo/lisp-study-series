@@ -158,12 +158,12 @@ Hello, World!
 프로젝트를 독립 실행 가능한 바이너리 파일로 컴파일합니다:
 
 ```bash
-./build.sh {project-name}
+./run-build.sh {project-name}
 ```
 
 **설명:**
 
-- `build.sh` 스크립트는 SBCL의 `save-lisp-and-die` 함수를 사용하여 실행 파일을 생성합니다
+- `run-build.sh` 스크립트는 SBCL의 `save-lisp-and-die` 함수를 사용하여 실행 파일을 생성합니다
 - 생성된 바이너리는 Lisp 런타임 없이도 독립적으로 실행할 수 있습니다
 - 빌드된 실행 파일은 배포가 용이하며 시작 시간이 빠릅니다
 
@@ -186,7 +186,7 @@ Hello, World!
 ├── tests/
 │   └── main.lisp          # 테스트 코드
 ├── quicklisp/             # Quicklisp 설치 디렉토리
-└── build.sh               # 빌드 스크립트
+└── run-build.sh               # 빌드 스크립트
 ```
 
 ### 유용한 REPL 명령어

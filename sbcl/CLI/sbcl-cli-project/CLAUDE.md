@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build & Run Commands
 
-**Prerequisites:** SBCL 2.5.10 (see `.tool-versions`) and Quicklisp. First-time setup:
+**Prerequisites:** sbcl 2.6.0 (see `.tool-versions`) and Quicklisp. First-time setup:
 ```bash
 sbcl --script setup-quicklisp.lisp
 ```
 
 **Build standalone binary:**
 ```bash
-./build.sh
+./run-build.sh
 # produces ./sbcl-cli-project executable
 ```
 
@@ -41,7 +41,7 @@ This is a minimal SBCL CLI application using ASDF for system definition and Quic
 ### Key Patterns
 
 - **Package per file:** `src/main.lisp` defines and enters the `sbcl-cli-project` package; tests define `sbcl-cli-project-tests`
-- **Build mechanism:** `build.sh` uses `asdf:make` which triggers `program-op` (SBCL's `save-lisp-and-die`) to produce a standalone binary
+- **Build mechanism:** `run-build.sh` uses `asdf:make` which triggers `program-op` (SBCL's `save-lisp-and-die`) to produce a standalone binary
 - **Test execution:** `run-tests.sh` registers both project root and `tests/` directory in `asdf:*central-registry*`, then runs via `asdf:test-system`
 - **Test framework:** FiveAM with `def-suite`, `in-suite`, and `test` macros; test-op in `.asd` calls `fiveam:run!`
 - **No external dependencies** for the main system; only `fiveam` for tests

@@ -18,7 +18,7 @@ vim $HOME/.tool-versions
 
 ```bash
 # $HOME/.tool-versions
-sbcl 2.5.10
+sbcl 2.6.0
 ```
 
 Add `$HOME/.asdf/shims` to the front of your `$PATH`.
