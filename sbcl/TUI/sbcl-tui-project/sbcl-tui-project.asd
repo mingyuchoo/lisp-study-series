@@ -7,6 +7,7 @@
                 :serial t
                 :components
                 ((:file "package")
+                 (:file "screen-protocol")
                  (:file "ui")
                  (:file "main"))))
   :description "A TUI Application built with croatoan"

@@ -44,7 +44,7 @@
 
 (defun render (scr state)
   "Render the full TUI screen from the current state."
-  (clear scr)
+  (scr-clear scr)
   (draw-title-bar scr *app-title*)
 
   ;; Menu box
@@ -61,14 +61,14 @@
   ;; Message area
   (let ((msg (app-state-message state)))
     (when (plusp (length msg))
-      (move scr (+ 4 (length *menu-items*)) 4)
-      (setf (attributes scr) '(:bold))
-      (add-string scr msg)
-      (setf (attributes scr) '())))
+      (scr-move scr (+ 4 (length *menu-items*)) 4)
+      (scr-set-attrs scr '(:bold))
+      (scr-add-string scr msg)
+      (scr-set-attrs scr '())))
 
   ;; Status bar
   (draw-status-bar scr "[Up/k]Up [Down/j]Down [Enter]Select [q]Quit")
-  (refresh scr))
+  (scr-refresh scr))
 
 ;;; ============================================================
 ;;; Event handling (pure logic for key->state transitions)
