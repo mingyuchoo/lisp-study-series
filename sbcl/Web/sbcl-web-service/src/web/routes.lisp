@@ -21,15 +21,34 @@
   (setf (hunchentoot:content-type*) "text/html")
   (hunchentoot:handle-static-file (static-file-path "error.html")))
 
+;;;; Web Route Table (declarative data)
+
+(defparameter *web-routes*
+  '((:prefix  "/"                   . root-page)
+    (:regex   "^/(?!api/|$).*"      . handle-404))
+  "Declarative web route definitions as an alist of (type pattern . handler).
+   :regex routes are listed last to act as fallback catchers.")
+
 ;;;; Web Route Registration
 
-;; Register all web routes in the dispatch table
+(defun route->dispatcher (route)
+  "Convert a single route definition to a Hunchentoot dispatcher.
+   Pure function: dispatches on route type (:prefix or :regex).
+   ROUTE format: (:type pattern . handler)"
+  (let ((type (car route))
+        (pattern (cadr route))
+        (handler (cddr route)))
+    (ecase type
+      (:prefix (hunchentoot:create-prefix-dispatcher pattern handler))
+      (:regex  (hunchentoot:create-regex-dispatcher pattern handler)))))
+
+(defun web-routes->dispatchers (routes)
+  "Transform a list of web route definitions into Hunchentoot dispatchers.
+   Pure function: returns a list without modifying global state."
+  (mapcar #'route->dispatcher routes))
+
 (defun register-web-routes ()
   "Register all web routes in the Hunchentoot dispatch table."
-  ;; Static content routes
-  (push (hunchentoot:create-prefix-dispatcher "/" 'root-page)
-        hunchentoot:*dispatch-table*)
-  
-  ;; Error handlers - must be last to catch unmatched routes
-  (push (hunchentoot:create-regex-dispatcher "^/(?!api/|$).*" 'handle-404)
-        hunchentoot:*dispatch-table*))
+  (setf hunchentoot:*dispatch-table*
+        (append (web-routes->dispatchers *web-routes*)
+                hunchentoot:*dispatch-table*)))

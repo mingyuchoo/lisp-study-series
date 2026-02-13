@@ -21,17 +21,18 @@
       (format *error-output* "Error loading dependencies: ~A~%" e)
       nil)))  ; Return NIL on failure
 
-;; Initialize the application routes
+(defun build-dispatch-table ()
+  "Build a complete dispatch table by composing all route modules.
+   Pure function: returns a new dispatch table list without side effects."
+  (append (sbcl-web-service.web:web-routes->dispatchers
+           sbcl-web-service.web:*web-routes*)
+          (sbcl-web-service.api:api-routes->dispatchers
+           sbcl-web-service.api:*api-routes*)))
+
 (defun initialize-routes ()
-  "Initialize all application routes."
-  ;; Clear the dispatch table to start fresh
-  (setf hunchentoot:*dispatch-table* nil)
-  
-  ;; Register all routes
-  (sbcl-web-service.web:register-web-routes)
-  (sbcl-web-service.api:register-api-routes)
-  
-  ;; Return success
+  "Install the composed dispatch table into Hunchentoot.
+   Single point of side effect for route registration."
+  (setf hunchentoot:*dispatch-table* (build-dispatch-table))
   t)
 
 ;; Main function to start the application

@@ -6,100 +6,87 @@
 
 (in-package :sbcl-web-service.tests)
 
-;; Define a test suite for our web service
+;;;; Test Infrastructure
+
+(defparameter *test-port* 8088
+  "Default port for test server instances.")
+
+(defun call-with-test-server (test-fn &optional (port *test-port*))
+  "Higher-order function: start a server, call TEST-FN with the port,
+   and guarantee cleanup via unwind-protect."
+  (unwind-protect
+      (progn
+        (start-server port)
+        (funcall test-fn port))
+    (stop-server)))
+
+(defun test-url (port path)
+  "Build a test URL from port and path. Pure function."
+  (format nil "http://localhost:~A~A" port path))
+
+;;;; Test Suite
+
 (def-suite sbcl-web-service-tests
   :description "Tests for the SBCL web service")
 
 (in-suite sbcl-web-service-tests)
 
-;; Test for server startup
 (test server-startup
   "Test that the server starts up correctly"
-  (let ((port 8088))
-    ;; Start the server on a test port
-    (start-server port)
-    ;; Check that the server is running
-    (is-true *acceptor*)
-    ;; Stop the server
-    (stop-server)))
+  (call-with-test-server
+   (lambda (port)
+     (declare (ignore port))
+     (is-true *acceptor*))))
 
-;; Test for the root endpoint
 (test hello-world-endpoint
   "Test that the root endpoint returns 'Hello, World!'"
-  (let ((port 8088))
-    ;; Start the server on a test port
-    (start-server port)
-    ;; Test the root endpoint
-    (multiple-value-bind (body status)
-        (http-request (format nil "http://localhost:~A/" port) :force-binary nil)
-      ;; Check that we get a 200 OK response
-      (is (= status 200))
-      ;; Check that the body contains the expected content
-      (is (string= "Hello, World!" body)))
-    ;; Stop the server
-    (stop-server)))
+  (call-with-test-server
+   (lambda (port)
+     (multiple-value-bind (body status)
+         (http-request (test-url port "/") :force-binary nil)
+       (is (= status 200))
+       (is (string= "Hello, World!" body))))))
 
-;; Test for API endpoint
 (test api-endpoint
   "Test that the API endpoint returns valid JSON"
-  (let ((port 8088))
-    ;; Start the server on a test port
-    (start-server port)
-    ;; Test the API endpoint
-    (multiple-value-bind (body status)
-        (http-request (format nil "http://localhost:~A/api/example" port) :force-binary nil)
-      ;; Check that we get a 200 OK response
-      (is (= status 200))
-      ;; Check that the body is valid JSON and contains expected fields
-      (let ((json-response (json:decode-json-from-string body)))
-        (is (equal "success" (cdr (assoc :status json-response))))
-        (is (equal "API is working" (cdr (assoc :message json-response))))
-        (is (assoc :data json-response))))
-    ;; Stop the server
-    (stop-server)))
+  (call-with-test-server
+   (lambda (port)
+     (multiple-value-bind (body status)
+         (http-request (test-url port "/api/example") :force-binary nil)
+       (is (= status 200))
+       (let ((json-response (json:decode-json-from-string body)))
+         (is (equal "success" (cdr (assoc :status json-response))))
+         (is (equal "API is working" (cdr (assoc :message json-response))))
+         (is (assoc :data json-response)))))))
 
-;; Test for health endpoint
 (test health-endpoint
   "Test that the health endpoint returns valid JSON"
-  (let ((port 8088))
-    ;; Start the server on a test port
-    (start-server port)
-    ;; Test the health endpoint
-    (multiple-value-bind (body status)
-        (http-request (format nil "http://localhost:~A/api/health" port) :force-binary nil)
-      ;; Check that we get a 200 OK response
-      (is (= status 200))
-      ;; Check that the body is valid JSON and contains expected fields
-      (let ((json-response (json:decode-json-from-string body)))
-        (is (equal "ok" (cdr (assoc :status json-response))))
-        (is (assoc :version json-response))
-        (is (assoc :timestamp json-response))))
-    ;; Stop the server
-    (stop-server)))
+  (call-with-test-server
+   (lambda (port)
+     (multiple-value-bind (body status)
+         (http-request (test-url port "/api/health") :force-binary nil)
+       (is (= status 200))
+       (let ((json-response (json:decode-json-from-string body)))
+         (is (equal "ok" (cdr (assoc :status json-response))))
+         (is (assoc :version json-response))
+         (is (assoc :timestamp json-response)))))))
 
-;; Test for 404 handling
 (test not-found-handling
   "Test that unknown routes return 404"
-  (let ((port 8088))
-    ;; Start the server on a test port
-    (start-server port)
-    ;; Test an unknown route
-    (multiple-value-bind (body status)
-        (http-request (format nil "http://localhost:~A/unknown-route" port) :force-binary nil)
-      ;; Check that we get a 404 response
-      (is (= status 404))
-      ;; Check that the body contains the 404 error page content
-      (is (search "Page Not Found" body)))
-    ;; Stop the server
-    (stop-server)))
+  (call-with-test-server
+   (lambda (port)
+     (multiple-value-bind (body status)
+         (http-request (test-url port "/unknown-route") :force-binary nil)
+       (is (= status 404))
+       (is (search "Page Not Found" body))))))
 
-;; Function to run all tests
+;;;; Test Runners
+
 (defun run-tests ()
   (format t "Running tests for the SBCL web service...~%")
   (run! 'sbcl-web-service-tests)
   (format t "Tests completed.~%"))
 
-;; Function to run tests interactively
 (defun run-tests-interactive ()
   (format t "Running tests for the SBCL web service interactively...~%")
   (run! 'sbcl-web-service-tests)

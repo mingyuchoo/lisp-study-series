@@ -2,31 +2,36 @@
 
 ;;;; Environment Configuration
 
+(defun parse-env-line (line)
+  "Parse a single KEY=VALUE line into a cons cell, or NIL if invalid.
+   Pure function: no side effects."
+  (let* ((trimmed (string-trim '(#\Space #\Tab) line))
+         (pos (position #\= trimmed)))
+    (when (and (plusp (length trimmed))
+               (not (char= (char trimmed 0) #\#))
+               pos (> pos 0))
+      (cons (string-trim '(#\Space #\Tab) (subseq trimmed 0 pos))
+            (string-trim '(#\Space #\Tab) (subseq trimmed (1+ pos)))))))
+
 (defun read-env-file (file-path)
   "Read environment variables from a file in KEY=VALUE format.
-   Returns a hash table with keys and values as strings."
-  (let ((env-vars (make-hash-table :test #'equal)))
-    (handler-case
-        (with-open-file (stream file-path :if-does-not-exist nil)
-          (when stream
-            (loop for line = (read-line stream nil nil)
-                  while line
-                  do (let* ((trimmed-line (string-trim '(#\Space #\Tab) line))
-                            (pos (position #\= trimmed-line)))
-                       (when (and (not (string= "" trimmed-line))
-                                  (not (char= (char trimmed-line 0) #\#))
-                                  pos (> pos 0))
-                         (let ((key (string-trim '(#\Space #\Tab) (subseq trimmed-line 0 pos)))
-                               (value (string-trim '(#\Space #\Tab) (subseq trimmed-line (1+ pos)))))
-                           (setf (gethash key env-vars) value)))))))
-      (error (e)
-        (format *error-output* "Error reading environment file ~A: ~A~%" file-path e)))
-    env-vars))
+   Returns an immutable alist of (key . value) string pairs."
+  (handler-case
+      (with-open-file (stream file-path :if-does-not-exist nil)
+        (when stream
+          (loop for line = (read-line stream nil nil)
+                while line
+                for pair = (parse-env-line line)
+                when pair collect pair)))
+    (error (e)
+      (format *error-output* "Error reading environment file ~A: ~A~%" file-path e)
+      nil)))
 
 (defun get-env-var (env-vars key &optional default)
-  "Get environment variable value from the provided hash table.
-   If the key doesn't exist, returns the default value."
-  (or (gethash key env-vars) default))
+  "Look up an environment variable from an alist.
+   Pure function: returns the value or default without side effects."
+  (let ((pair (assoc key env-vars :test #'equal)))
+    (if pair (cdr pair) default)))
 
 (defun parse-env-var-integer (env-vars key &optional default)
   "Parse an environment variable as an integer with error handling."

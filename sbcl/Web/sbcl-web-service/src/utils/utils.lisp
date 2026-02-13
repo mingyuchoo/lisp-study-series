@@ -60,8 +60,13 @@
       (log-error "Failed to parse JSON: ~A" e)
       nil)))
 
+(defun encode-json-body (data)
+  "Encode data as a JSON string. Pure function with no side effects."
+  (json:encode-json-to-string data))
+
 (defun json-response (data &optional (status 200))
-  "Create a JSON response with the given data and status code."
+  "Set HTTP response headers and return JSON-encoded body.
+   Side effects: sets content-type and return-code via Hunchentoot."
   (setf (hunchentoot:content-type*) "application/json")
   (setf (hunchentoot:return-code*) status)
-  (json:encode-json-to-string data))
+  (encode-json-body data))

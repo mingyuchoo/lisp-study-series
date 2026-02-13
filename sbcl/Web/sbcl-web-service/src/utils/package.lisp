@@ -10,6 +10,7 @@
            ;; Time utilities
            :get-timestamp
            ;; JSON utilities
+           :encode-json-body
            :parse-json-safely
            :json-response))
 
