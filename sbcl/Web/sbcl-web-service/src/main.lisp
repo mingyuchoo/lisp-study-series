@@ -23,11 +23,12 @@
 
 (defun build-dispatch-table ()
   "Build a complete dispatch table by composing all route modules.
+   API routes come first for specific path matching, then web routes.
    Pure function: returns a new dispatch table list without side effects."
-  (append (sbcl-web-service.web:web-routes->dispatchers
-           sbcl-web-service.web:*web-routes*)
-          (sbcl-web-service.api:api-routes->dispatchers
-           sbcl-web-service.api:*api-routes*)))
+  (append (sbcl-web-service.api:api-routes->dispatchers
+           sbcl-web-service.api:*api-routes*)
+          (sbcl-web-service.web:web-routes->dispatchers
+           sbcl-web-service.web:*web-routes*)))
 
 (defun initialize-routes ()
   "Install the composed dispatch table into Hunchentoot.

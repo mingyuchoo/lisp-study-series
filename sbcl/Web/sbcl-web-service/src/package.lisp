@@ -7,10 +7,13 @@
         :sbcl-web-service.web)
   (:export ;; Main entry point
            :main
+           :build-dispatch-table
+           :initialize-routes
            ;; Re-export core functionality
-           :start-server 
+           :start-server
            :stop-server
            :*config*
+           :*acceptor*
            :get-env-var
            :read-env-file))
 

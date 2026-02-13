@@ -3,9 +3,11 @@
   (:use :cl :split-sequence)
   (:export ;; Configuration (pure)
            :*config*
+           :*env-vars*
            :parse-env-line
            :get-env-var
            :read-env-file
+           :parse-env-var-integer
            ;; Server - pure functions
            :extract-server-config
            :resolve-server-params

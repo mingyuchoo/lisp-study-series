@@ -2,6 +2,10 @@
   (:documentation "Utility functions for the SBCL web service.")
   (:use :cl :split-sequence)
   (:export ;; Logging
+           :*log-levels*
+           :*current-log-level*
+           :log-level-enabled-p
+           :log-message
            :log-debug
            :log-info
            :log-warn

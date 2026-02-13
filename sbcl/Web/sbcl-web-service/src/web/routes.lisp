@@ -24,10 +24,11 @@
 ;;;; Web Route Table (declarative data)
 
 (defparameter *web-routes*
-  '((:prefix  "/"                   . root-page)
-    (:regex   "^/(?!api/|$).*"      . handle-404))
+  '((:regex   "^/$"                  . root-page)
+    (:regex   "^/(?!api/|$).*"       . handle-404))
   "Declarative web route definitions as an alist of (type pattern . handler).
-   :regex routes are listed last to act as fallback catchers.")
+   Root uses exact regex match to avoid catching all URLs.
+   404 regex acts as fallback for non-API, non-root paths.")
 
 ;;;; Web Route Registration
 
