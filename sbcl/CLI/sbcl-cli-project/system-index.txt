@@ -1,2 +1,8 @@
 sbcl-cli-project.asd
 tests/sbcl-cli-project-tests.asd
+quicklisp/quicklisp/quicklisp.asd
+quicklisp/dists/quicklisp/software/fiveam-20241012-git/fiveam.asd
+quicklisp/dists/quicklisp/software/alexandria-20241012-git/alexandria.asd
+quicklisp/dists/quicklisp/software/asdf-flv-version-2.2/net.didierverna.asdf-flv.asd
+quicklisp/dists/quicklisp/software/trivial-backtrace-20230214-git/trivial-backtrace.asd
+quicklisp/dists/quicklisp/software/trivial-backtrace-20230214-git/trivial-backtrace-test.asd

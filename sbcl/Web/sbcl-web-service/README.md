@@ -23,20 +23,20 @@
 1. 시스템에 SBCL이 설치되어 있는지 확인하세요.
 2. 저장소를 클론합니다:
 
-   ```
+   ```bash
    git clone <repository-url>
    ```
 
 3. 프로젝트 디렉토리로 이동합니다:
 
-   ```
+   ```bash
    cd sbcl-web-service
    ```
 
 4. Quicklisp를 설치합니다 (최초 1회만):
 
    ```bash
-   sbcl --load setup-quicklisp.lisp --quit
+   sbcl --script setup-quicklisp.lisp
    ```
 
    이 명령은 프로젝트 디렉토리에 Quicklisp를 로컬로 설치하고 필요한 모든 의존성을 다운로드합니다.
