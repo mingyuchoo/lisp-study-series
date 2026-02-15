@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install Quicklisp
+sbcl --script setup-quicklisp.lisp
+
 # Check if Quicklisp is installed, if not, install it
 if [ ! -f "quicklisp/setup.lisp" ]; then
     echo "Quicklisp not found. Installing..."

@@ -234,6 +234,9 @@ EOF
 cat > "$PROJECT_NAME/run-build.sh" << EOF
 #!/usr/bin/env sh
 
+# Install Quicklisp
+sbcl --script setup-quicklisp.lisp
+
 # Run build command
 sbcl --eval "(require :asdf)" \\
      --eval "(push (uiop:getcwd) asdf:*central-registry*)" \\

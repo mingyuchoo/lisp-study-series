@@ -466,6 +466,9 @@ sed -i "s/__PROJECT_NAME__/$PROJECT_NAME/g" "$PROJECT_NAME/src/main.lisp"
 cat > "$PROJECT_NAME/run-build.sh" << EOF
 #!/usr/bin/env sh
 
+# Install Quicklisp
+sbcl --script setup-quicklisp.lisp
+
 # Run build command
 sbcl --eval "(require :asdf)" \\
      --eval "(push (uiop:getcwd) asdf:*central-registry*)" \\
